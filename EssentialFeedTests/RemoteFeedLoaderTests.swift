@@ -6,19 +6,7 @@
 //
 
 import XCTest
-struct RemoteFeedLoader {
-    let url: URL
-    let client: HTTPClient
-    
-    func load() {
-        client.get(from: url)
-    }
-}
-protocol HTTPClient {
-    func get(from url: URL)
-    
-}
-
+import EssentialFeed
 
 class RemoteFeedLoaderTests: XCTestCase {
 
