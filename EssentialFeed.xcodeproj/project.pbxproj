@@ -14,6 +14,7 @@
 		E72D05A326CD36B0002146D9 /* RemoteFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72D05A226CD36B0002146D9 /* RemoteFeedLoader.swift */; };
 		E7F28B8326CA6F570076A9DF /* RemoteFeedLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F28B8226CA6F570076A9DF /* RemoteFeedLoaderTests.swift */; };
 		E7FB79C026D59C7E00213A2A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FB79BF26D59C7E00213A2A /* HTTPClient.swift */; };
+		E7FB79C426D59CF700213A2A /* FeedItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FB79C326D59CF700213A2A /* FeedItemsMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		E72D05A226CD36B0002146D9 /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
 		E7F28B8226CA6F570076A9DF /* RemoteFeedLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoaderTests.swift; sourceTree = "<group>"; };
 		E7FB79BF26D59C7E00213A2A /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		E7FB79C326D59CF700213A2A /* FeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			children = (
 				E72D05A226CD36B0002146D9 /* RemoteFeedLoader.swift */,
 				E7FB79BF26D59C7E00213A2A /* HTTPClient.swift */,
+				E7FB79C326D59CF700213A2A /* FeedItemsMapper.swift */,
 			);
 			path = "Feed API";
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7FB79C426D59CF700213A2A /* FeedItemsMapper.swift in Sources */,
 				E71D3D3A26C578A400189843 /* FeedLoader.swift in Sources */,
 				E72D05A326CD36B0002146D9 /* RemoteFeedLoader.swift in Sources */,
 				E7FB79C026D59C7E00213A2A /* HTTPClient.swift in Sources */,
