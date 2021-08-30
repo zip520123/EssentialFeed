@@ -25,7 +25,22 @@ class URLSessionHTTPClient {
     
 }
 class URLHTTPClientTests: XCTestCase {
-    
+    func test_getFromURL_performsGETRequestWithURL() {
+        URLProtocolStub.startInterceptingRequests()
+        defer {URLProtocolStub.stopInterceptingRequests()}
+        let url = URL(string: "http://a-url.com")!
+        let exp = expectation(description: "wait for request")
+        
+        URLProtocolStub.observeRequests { request in
+            XCTAssertEqual(request.url, url)
+            XCTAssertEqual(request.httpMethod, "GET")
+            exp.fulfill()
+        }
+        
+        URLSessionHTTPClient().get(from: url) { _ in }
+        
+        wait(for: [exp], timeout: 1)
+    }
     
     func test_getFromURL_failsOnRequestError() {
         URLProtocolStub.startInterceptingRequests()
@@ -58,7 +73,7 @@ class URLHTTPClientTests: XCTestCase {
     private class URLProtocolStub: URLProtocol {
         
         private static var stub: Stub?
-        
+        private static var requestObserver: ((URLRequest) -> Void)?
         private struct Stub {
             let data: Data?
             let response: URLResponse?
@@ -69,6 +84,10 @@ class URLHTTPClientTests: XCTestCase {
             stub = Stub(data: data, response: response, error: error)
         }
         
+        static func observeRequests(observer: @escaping (URLRequest)-> Void) {
+            requestObserver = observer
+        }
+        
         static func startInterceptingRequests() {
             URLProtocol.registerClass(URLProtocolStub.self)
         }
@@ -76,10 +95,12 @@ class URLHTTPClientTests: XCTestCase {
         static func stopInterceptingRequests() {
             URLProtocol.unregisterClass(URLProtocolStub.self)
             stub = nil
+            requestObserver = nil
         }
         
         override class func canInit(with request: URLRequest) -> Bool {
-            true
+            requestObserver?(request)
+            return true
         }
         
         override class func canonicalRequest(for request: URLRequest) -> URLRequest {
