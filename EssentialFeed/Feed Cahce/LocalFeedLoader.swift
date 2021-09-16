@@ -18,6 +18,17 @@ public final class LocalFeedLoader {
         self.currentDate = currentDate
     }
     
+    private let maxCacheAgeInDays = 7
+    
+    private func validate(_ timestamp: Date) -> Bool {
+        let calendar = Calendar(identifier: .gregorian)
+        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else {return false}
+        return maxCacheAge > currentDate()
+    }
+    
+}
+
+extension LocalFeedLoader {
     public func save(_ feed: [FeedImage], completion: @escaping (SaveResult)->Void = {_ in}) {
         store.deleteCachedFeed {[weak self] error in
             guard let self = self else {return}
@@ -29,6 +40,16 @@ public final class LocalFeedLoader {
         }
     }
     
+    private func cache(_ feed: [FeedImage], with completion: @escaping (SaveResult)->Void) {
+        store.insert(feed.toLocal(), timestamp: currentDate(), completion: { [weak self] error in
+            if self != nil {
+                completion(error)
+            }
+        })
+    }
+}
+
+extension LocalFeedLoader {
     public func load(completion: @escaping (LoadResult)->Void ) {
         store.retrieve(completion: { [weak self] result in
             guard let self = self else {return }
@@ -57,22 +78,6 @@ public final class LocalFeedLoader {
             }
         })
         
-    }
-    
-    private let maxCacheAgeInDays = 7
-    
-    private func validate(_ timestamp: Date) -> Bool {
-        let calendar = Calendar(identifier: .gregorian)
-        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else {return false}
-        return maxCacheAge > currentDate()
-    }
-    
-    private func cache(_ feed: [FeedImage], with completion: @escaping (SaveResult)->Void) {
-        store.insert(feed.toLocal(), timestamp: currentDate(), completion: { [weak self] error in
-            if self != nil {
-                completion(error)
-            }
-        })
     }
 }
 
