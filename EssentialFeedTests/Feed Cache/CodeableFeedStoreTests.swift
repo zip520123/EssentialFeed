@@ -8,7 +8,7 @@
 import XCTest
 import EssentialFeed
 
-class CodeableFeedStore {
+class CodableFeedStore {
     private struct Cache: Codable {
         let feed: [CodableFeedImage]
         let timestamp: Date
@@ -133,7 +133,9 @@ class CodeableFeedStoreTests: XCTestCase {
     
     // - MARK: Helpers
     
-    private func makeSUT() -> CodeableFeedStore {
-        return CodeableFeedStore()
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CodableFeedStore {
+        let sut: CodableFeedStore = CodableFeedStore()
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
     }
 }
