@@ -48,8 +48,14 @@ class CodableFeedStore {
         }
         
         let decoder = JSONDecoder()
-        let cache = try! decoder.decode(Cache.self, from: data)
-        completion(.found(cache.localFeed, cache.timestamp))
+        do {
+            let cache = try decoder.decode(Cache.self, from: data)
+            completion(.found(cache.localFeed, cache.timestamp))
+        } catch {
+            completion(.failure(error))
+        }
+        
+        
     }
     
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
@@ -101,6 +107,12 @@ class CodeableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieve: .found(feed, timestamp))
     }
     
+    func test_retrieve_deliversFailureOnRetrievalError() {
+        let sut = makeSUT()
+        try! "Invalid data".write(to: testSpecificStoreURL(), atomically: false, encoding: .utf8)
+        expect(sut, toRetrieve: .failure(anyNSError()))
+    }
+    
     // - MARK: Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CodableFeedStore {
@@ -132,7 +144,7 @@ class CodeableFeedStoreTests: XCTestCase {
             case let (.found(resultImage, resultDate), .found(expectedImage, expetedDate)):
                 XCTAssertEqual(resultImage, expectedImage, file: file, line: line)
                 XCTAssertEqual(resultDate, expetedDate, file: file, line: line)
-            case (.empty, .empty):
+            case (.empty, .empty), (.failure, .failure):
                 break
             default:
                 XCTFail("expected \(expetedResult), got \(result) instead", file: file, line: line)
