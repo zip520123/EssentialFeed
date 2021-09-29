@@ -31,12 +31,7 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
         let sutToPerformLoad = makeSUT()
         let feed = uniqueImageFeed().models
         
-        let saveExp = expectation(description: "Wait for save completion")
-        sutToPerformSave.save(feed) { saveError in
-            XCTAssertNil(saveError, "Expected to save feed successfully")
-            saveExp.fulfill()
-        }
-        wait(for: [saveExp], timeout: 1)
+        save(sutToPerformSave, with: feed)
         
         expect(sutToPerformLoad, toLoad: feed)
         
@@ -49,19 +44,9 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
         let firstFeed = uniqueImageFeed().models
         let lastFeed = uniqueImageFeed().models
         
-        let saveExp = expectation(description: "Wait for save completion")
-        sutToPerformFirstSave.save(firstFeed) { error in
-            XCTAssertNil(error)
-            saveExp.fulfill()
-        }
-        wait(for: [saveExp], timeout: 1)
+        save(sutToPerformFirstSave, with: firstFeed)
         
-        let saveExp2 = expectation(description: "Wait for save completion")
-        sutToPerformLastSave.save(lastFeed) { error in
-            XCTAssertNil(error)
-            saveExp2.fulfill()
-        }
-        wait(for: [saveExp2], timeout: 1)
+        save(sutToPerformLastSave, with: lastFeed)
         
         expect(sutToPerformLoad, toLoad: lastFeed)
     }
@@ -74,6 +59,15 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
+    }
+    
+    private func save(_ sut: LocalFeedLoader, with feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
+        let saveExp = expectation(description: "Wait for save completion")
+        sut.save(feed) { error in
+            XCTAssertNil(error)
+            saveExp.fulfill()
+        }
+        wait(for: [saveExp], timeout: 1)
     }
     
     private func expect(_ sut: LocalFeedLoader, toLoad expectedFeed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
