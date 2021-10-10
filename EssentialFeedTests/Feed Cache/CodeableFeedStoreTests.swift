@@ -69,7 +69,7 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
         XCTAssertNil(insertionError)
     }
     
-    func test_insert_overridePreviouslyInsertedCachedValues() {
+    func test_insert_overridesPreviouslyInsertedCacheValues() {
         let sut = makeSUT()
         let firstInsertionError = insert(sut, uniqueImageFeed().local, Date())
         XCTAssertNil(firstInsertionError, "Expected to insert cache successfully")
