@@ -83,7 +83,7 @@ class CoreDataFeedStoreTests: XCTestCase, FailableFeedStore {
         
         deleteCache(sut)
         
-        expect(sut, toRetrieve: .success(.found(feed, timestamp)))
+        expect(sut, toRetrieve: .success(CacheFeed(feed: feed, timestamp: timestamp)))
     }
     
     func test_retrieve_deliversFoundValuesOnNonEmptyCache() throws {
@@ -161,7 +161,7 @@ class CoreDataFeedStoreTests: XCTestCase, FailableFeedStore {
         
         deleteCache(sut)
         
-        expect(sut, toRetrieve: .success(.found(feed, timestamp)))
+        expect(sut, toRetrieve: .success(CacheFeed(feed: feed, timestamp: timestamp)))
     }
     
 

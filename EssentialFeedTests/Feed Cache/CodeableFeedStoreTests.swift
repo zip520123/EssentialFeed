@@ -36,7 +36,7 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
         let timestamp = Date()
         insert(sut, feed, timestamp)
         
-        expect(sut, toRetrieveTwice: .success(.found(feed, timestamp)))
+        expect(sut, toRetrieveTwice: .success(CacheFeed(feed: feed, timestamp: timestamp)))
     }
     
     func test_retrieve_deliversFoundValuesOnNonEmptyCache() {
@@ -78,7 +78,7 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
         let latestTimeStamp = Date()
         insert(sut, latestFeed, latestTimeStamp)
         
-        expect(sut, toRetrieve: .success(.found(latestFeed, latestTimeStamp)))
+        expect(sut, toRetrieve: .success(CacheFeed(feed: latestFeed, timestamp: latestTimeStamp)))
         
     }
     
@@ -114,14 +114,14 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
         
         insert(sut, feed, timestamp)
         
-        expect(sut, toRetrieve: .success(.empty))
+        expect(sut, toRetrieve: .success(.none))
     }
     
     func test_delete_hasNoSideEffectsOnEmptyCache() {
         let sut = makeSUT()
         deleteCache(sut)
         
-        expect(sut, toRetrieve: .success(.empty))
+        expect(sut, toRetrieve: .success(.none))
     }
     
     func test_delete_deliverNoErrorOnEmptyCache() {
@@ -137,7 +137,7 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
         
         deleteCache(sut)
         
-        expect(sut, toRetrieve: .success(.empty))
+        expect(sut, toRetrieve: .success(.none))
     }
     
     func test_delete_deliverNoErrorOnNonEmptyCache() {
@@ -165,7 +165,7 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
         insert(sut, uniqueImageFeed().local , Date())
         
         deleteCache(sut)
-        expect(sut, toRetrieve: .success(.empty))
+        expect(sut, toRetrieve: .success(.none))
     }
     
     func test_storeSideEffect_runSerially() {
