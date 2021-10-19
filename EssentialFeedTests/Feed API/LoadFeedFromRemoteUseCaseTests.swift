@@ -8,7 +8,7 @@
 import XCTest
 import EssentialFeed
 
-class RemoteFeedLoaderTests: XCTestCase {
+class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 
     func test_init() {
         
@@ -121,8 +121,8 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
 
     
-    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedItem, json: [String: Any]) {
-        let item = FeedItem(id: id, description: description, location: location, imageURL: imageURL)
+    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedImage, json: [String: Any]) {
+        let item = FeedImage(id: id, description: description, location: location, url: imageURL)
         let json = [
             "id" : id.uuidString,
             "description": description,
@@ -166,14 +166,14 @@ class RemoteFeedLoaderTests: XCTestCase {
         var requestedURLs: [URL] {
             return messages.map { $0.url }
         }
-        private var messages = [(url: URL, completion:(HTTPClientResult)->Void)]()
+        private var messages = [(url: URL, completion:(HTTPClient.Result)->Void)]()
         
-        func get(from url: URL, completion: @escaping (HTTPClientResult)->Void) {
+        func get(from url: URL, completion: @escaping (HTTPClient.Result)->Void) {
             messages.append((url,completion))
         }
         
         func complete(with error: Error, at index: Int = 0) {
-            messages[index].completion(HTTPClientResult.failure(error))
+            messages[index].completion(HTTPClient.Result.failure(error))
         }
         
         func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
@@ -182,7 +182,7 @@ class RemoteFeedLoaderTests: XCTestCase {
                 statusCode: code,
                 httpVersion: nil,
                 headerFields: nil)!
-            messages[index].completion(HTTPClientResult.success(data, response))
+            messages[index].completion(HTTPClient.Result.success((data, response)))
         }
     }
 }
