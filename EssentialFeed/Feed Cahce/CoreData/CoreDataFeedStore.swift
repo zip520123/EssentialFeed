@@ -55,10 +55,10 @@ public final class CoreDataFeedStore: FeedStore {
                 
                 try context.save()
                 
-                completion(nil)
+                completion(.success(()))
             } catch {
                 context.rollback()
-                completion(error)
+                completion(.failure(error))
             }
         }
     }
@@ -75,10 +75,10 @@ public final class CoreDataFeedStore: FeedStore {
                     context.delete(cache)
                     try context.save()
                 }
-                completion(nil)
+                completion(.success(()))
             } catch {
                 context.rollback()
-                completion(error)
+                completion(.failure(error))
             }
         }
     }
