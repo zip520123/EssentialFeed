@@ -150,7 +150,7 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
     }
     
     func test_delete_deliversErrorOnDeletionError() {
-        let noDeletionPermissionURL = cacheDirectory()
+        let noDeletionPermissionURL = notSavePath()
         let sut = makeSUT(storeURL: noDeletionPermissionURL)
         insert(sut, uniqueImageFeed().local , Date())
         
@@ -160,7 +160,7 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
     }
     
     func test_delete_hasNoSideEffectOnDeletionError() {
-        let noDeletionPermissionURL = cacheDirectory()
+        let noDeletionPermissionURL = notSavePath()
         let sut = makeSUT(storeURL: noDeletionPermissionURL)
         insert(sut, uniqueImageFeed().local , Date())
         
@@ -210,6 +210,10 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
     
     private func cacheDirectory() -> URL {
         FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+    }
+    
+    private func notSavePath() -> URL {
+        URL(string: "/")!
     }
     
     private func setupEmptyStoreState() {

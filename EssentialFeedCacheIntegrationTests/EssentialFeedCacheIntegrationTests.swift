@@ -63,8 +63,13 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
     
     private func save(_ sut: LocalFeedLoader, with feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
         let saveExp = expectation(description: "Wait for save completion")
-        sut.save(feed) { error in
-            XCTAssertNil(error)
+        sut.save(feed) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Expected save success, got \(error) instead", file: file, line: line)
+            default:
+                break
+            }
             saveExp.fulfill()
         }
         wait(for: [saveExp], timeout: 1)
