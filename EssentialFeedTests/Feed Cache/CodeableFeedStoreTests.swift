@@ -165,6 +165,7 @@ class CodeableFeedStoreTests: XCTestCase, FailableFeedStore {
         insert(sut, uniqueImageFeed().local , Date())
         
         deleteCache(sut)
+        
         expect(sut, toRetrieve: .success(.none))
     }
     
