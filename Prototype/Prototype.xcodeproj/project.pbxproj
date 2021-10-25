@@ -13,6 +13,7 @@
 		E771ABF42723206D00E224A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E771ABF32723206D00E224A6 /* Assets.xcassets */; };
 		E771ABF72723206D00E224A6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E771ABF52723206D00E224A6 /* LaunchScreen.storyboard */; };
 		E771AC0127232CCC00E224A6 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E771AC0027232CCC00E224A6 /* FeedViewController.swift */; };
+		E7A749B12727423300D96CE0 /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A749B02727423300D96CE0 /* FeedImageCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		E771ABF62723206D00E224A6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E771ABF82723206D00E224A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E771AC0027232CCC00E224A6 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		E7A749B02727423300D96CE0 /* FeedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				E771ABEA2723206C00E224A6 /* AppDelegate.swift */,
 				E771ABEC2723206C00E224A6 /* SceneDelegate.swift */,
 				E771AC0027232CCC00E224A6 /* FeedViewController.swift */,
+				E7A749B02727423300D96CE0 /* FeedImageCell.swift */,
 				E771ABF02723206C00E224A6 /* Main.storyboard */,
 				E771ABF32723206D00E224A6 /* Assets.xcassets */,
 				E771ABF52723206D00E224A6 /* LaunchScreen.storyboard */,
@@ -138,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E771ABEB2723206C00E224A6 /* AppDelegate.swift in Sources */,
+				E7A749B12727423300D96CE0 /* FeedImageCell.swift in Sources */,
 				E771AC0127232CCC00E224A6 /* FeedViewController.swift in Sources */,
 				E771ABED2723206C00E224A6 /* SceneDelegate.swift in Sources */,
 			);
