@@ -37,7 +37,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
         let feed = uniqueImageFeed().local
         let timestamp = Date()
         
-        insert(sut, feed, Date())
+        insert(sut, feed, timestamp)
         
         expect(sut, toRetrieve: .success(CacheFeed(feed: feed, timestamp: timestamp)), file: file, line: line)
     }
