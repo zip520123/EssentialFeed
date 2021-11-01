@@ -34,6 +34,7 @@
 		E752B93326F4AC3E002350FE /* FeedCachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E752B93226F4AC3E002350FE /* FeedCachePolicy.swift */; };
 		E752B94026F76729002350FE /* CodeableFeedStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E752B93F26F76729002350FE /* CodeableFeedStoreTests.swift */; };
 		E752B94526F79CF8002350FE /* CodableFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E752B94426F79CF8002350FE /* CodableFeedStore.swift */; };
+		E756323527308FDA002B7D0B /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E756323427308FDA002B7D0B /* FeedViewController.swift */; };
 		E75B271826F25350006970B0 /* LoadFeedFromCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75B271726F25350006970B0 /* LoadFeedFromCacheUseCaseTests.swift */; };
 		E75B271E26F25547006970B0 /* FeedStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75B271D26F25547006970B0 /* FeedStoreSpy.swift */; };
 		E7750BC926DE351A00A4184A /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7750BC826DE351A00A4184A /* XCTestCase+MemoryLeakTracking.swift */; };
@@ -137,6 +138,7 @@
 		E752B93226F4AC3E002350FE /* FeedCachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCachePolicy.swift; sourceTree = "<group>"; };
 		E752B93F26F76729002350FE /* CodeableFeedStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeableFeedStoreTests.swift; sourceTree = "<group>"; };
 		E752B94426F79CF8002350FE /* CodableFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFeedStore.swift; sourceTree = "<group>"; };
+		E756323427308FDA002B7D0B /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		E75B271726F25350006970B0 /* LoadFeedFromCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFeedFromCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		E75B271D26F25547006970B0 /* FeedStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreSpy.swift; sourceTree = "<group>"; };
 		E7750BC826DE351A00A4184A /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				E70D25F0272B2677002CB08E /* Info.plist */,
+				E756323427308FDA002B7D0B /* FeedViewController.swift */,
 			);
 			path = EssentialFeediOS;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				TargetAttributes = {
 					E70D25EC272B2677002CB08E = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
 					};
 					E70D25F4272B2677002CB08E = {
 						CreatedOnToolsVersion = 12.4;
@@ -614,6 +618,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E756323527308FDA002B7D0B /* FeedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -725,6 +730,7 @@
 		E70D25FE272B2677002CB08E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -743,6 +749,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -751,6 +758,7 @@
 		E70D25FF272B2677002CB08E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -778,6 +786,7 @@
 		E70D2600272B2677002CB08E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = EssentialFeediOSTests/Info.plist;
@@ -800,6 +809,7 @@
 		E70D2601272B2677002CB08E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = EssentialFeediOSTests/Info.plist;
