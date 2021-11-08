@@ -53,11 +53,13 @@ final public class FeedViewController: UITableViewController {
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellModel = feeds[indexPath.row]
         let cell = FeedImageCell()
+        cell.feedImageView.image = nil
         cell.locationContainer.isHidden = cellModel.location == nil
         cell.locationLabel.text = cellModel.location
         cell.descripitonLabel.text = cellModel.description
         cell.feedimageContainer.startShimmering()
-        tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.imageURL) { [weak cell] _ in
+        tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.imageURL) { [weak cell] result in
+            cell?.feedImageView.image = try? UIImage(data: result.get())
             cell?.feedimageContainer.stopShimmering()
         }
         return cell
