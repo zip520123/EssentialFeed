@@ -204,6 +204,27 @@ final class FeedViewControllerTests: XCTestCase {
         
     }
     
+    func test_feedImageViewRetryAction_retriesImageLoad() {
+        let image0 = makeImage(url: URL(string: "http://url-0.com")!)
+        let image1 = makeImage(url: URL(string: "http://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [image0, image1], at: 0)
+        let view0 = sut.simulateFeedImageViewVisiable(at: 0)
+        let view1 = sut.simulateFeedImageViewVisiable(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [image0.imageURL, image1.imageURL])
+        
+        loader.completeImageLoadingWithError(at: 0)
+        loader.completeImageLoadingWithError(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [image0.imageURL, image1.imageURL], "Expected only two image URL requests before retry action")
+        
+        view0?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [image0.imageURL, image1.imageURL, image0.imageURL])
+        
+        view1?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [image0.imageURL, image1.imageURL, image0.imageURL, image1.imageURL])
+    }
+    
     //MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
@@ -324,6 +345,10 @@ private extension FeedViewController {
 }
 
 private extension FeedImageCell {
+    func simulateRetryAction() {
+        feedImageRetryButton.simulateTap()
+    }
+    
     var isShowingLocation: Bool {
         !locationContainer.isHidden
     }
@@ -346,6 +371,18 @@ private extension FeedImageCell {
     
     var isShowingRetryAction: Bool {
         !feedImageRetryButton.isHidden
+    }
+}
+
+private extension UIButton {
+    func simulateTap() {
+        allTargets.forEach({ target in
+            actions(forTarget: target, forControlEvent: .touchUpInside)?.forEach({ (selector) in
+                let selector1 = Selector(selector)
+                (target as NSObject).perform(selector1)
+            })
+        })
+        
     }
 }
 
