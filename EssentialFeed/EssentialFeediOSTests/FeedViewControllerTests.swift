@@ -421,6 +421,7 @@ private extension FeedImageCell {
 
 private extension UIButton {
     func simulateTap() {
+//        sendActions(for: .touchUpInside)
         allTargets.forEach({ target in
             actions(forTarget: target, forControlEvent: .touchUpInside)?.forEach({ (selector) in
                 let selector1 = Selector(selector)
