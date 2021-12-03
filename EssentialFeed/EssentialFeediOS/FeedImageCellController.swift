@@ -4,55 +4,43 @@
 //
 //  Created by zip520123 on 15/11/2021.
 //
-import EssentialFeed
 import UIKit
 
 final class FeedImageCellController {
+    let vm: FeedImageCellViewModel
     
-    private var task: FeedImageDataLoaderTask?
-    private let model: FeedImage
-    private let imageLoader: FeedImageDataLoader
-    
-    init(model: FeedImage, imageLoader: FeedImageDataLoader) {
-        self.model = model
-        self.imageLoader = imageLoader
+    init(_ vm: FeedImageCellViewModel) {
+        self.vm = vm
     }
     
     func view() -> UITableViewCell {
         let cell = FeedImageCell()
         cell.feedImageView.image = nil
         cell.feedImageRetryButton.isHidden = true
-        cell.locationContainer.isHidden = model.location == nil
-        cell.locationLabel.text = model.location
-        cell.descripitonLabel.text = model.description
-        cell.feedimageContainer.startShimmering()
-        
-        let loadImage = { [weak self, weak cell] in
-            guard let self = self else { return }
-            self.task = self.imageLoader.loadImageData(from: self.model.imageURL) { [weak cell] result in
-                let data = (try? result.get())
-                let image = data.map(UIImage.init) ?? nil
-                cell?.feedImageView.image = image
-                cell?.feedImageRetryButton.isHidden = image != nil
+        cell.locationContainer.isHidden = vm.location == nil
+        cell.locationLabel.text = vm.location
+        cell.descripitonLabel.text = vm.description
+        vm.shimmering = { [weak cell] isShimmering in
+            if isShimmering {
+                cell?.feedimageContainer.startShimmering()
+            } else {
                 cell?.feedimageContainer.stopShimmering()
             }
         }
+        vm.didLoadImage = { [weak cell] image in cell?.feedImageView.image = image }
+        vm.shouldHideButton = { [weak cell] shouldHide in cell?.feedImageRetryButton.isHidden = shouldHide }
         
-        cell.onRetry = loadImage
-        loadImage()
+        cell.onRetry = vm.loadImage
+        vm.loadImage()
         
         return cell
     }
     
-    func cancel() {
-        task?.cancel()
-    }
-    
     func preload() {
-        task = imageLoader.loadImageData(from: model.imageURL, completion: { _ in })
+        vm.preload()
     }
     
     func cancelLoad() {
-        task?.cancel()
+        vm.cancel()
     }
 }
