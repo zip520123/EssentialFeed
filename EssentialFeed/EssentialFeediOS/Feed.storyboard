@@ -125,6 +125,7 @@ label</string>
                         <connections>
                             <outlet property="dataSource" destination="d6v-Zx-YZf" id="uqa-Wk-kEc"/>
                             <outlet property="delegate" destination="d6v-Zx-YZf" id="9uR-TV-kGO"/>
+                            <outlet property="prefetchDataSource" destination="d6v-Zx-YZf" id="uk4-eW-3mv"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="My Feed" id="4SX-sZ-5Jt"/>
