@@ -258,6 +258,17 @@ final class FeedViewControllerTests: XCTestCase {
         
     }
     
+    func test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [makeImage()], at: 0)
+        
+        let view = sut.simulateFeedImageViewNotVisiable(at: 0)
+        loader.completeImageLoading(with: UIImage.make(with: .red).pngData()!, at: 0)
+        
+        XCTAssertNil(view?.renderedImage)
+    }
+    
     //MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
@@ -353,10 +364,12 @@ private extension FeedViewController {
         feedImageView(at: index) as? FeedImageCell
     }
     
-    func simulateFeedImageViewNotVisiable(at row: Int) {
+    @discardableResult
+    func simulateFeedImageViewNotVisiable(at row: Int) -> FeedImageCell? {
         let cell = simulateFeedImageViewVisiable(at: row)
         let index = IndexPath(row: row, section: feedImageSection)
         tableView.delegate?.tableView?(tableView, didEndDisplaying: cell!, forRowAt: index)
+        return cell
     }
     
     func simulateFeedImageViewNearVisiable(at row: Int) {

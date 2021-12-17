@@ -6,41 +6,46 @@
 //
 import UIKit
 
-final class FeedImageCellController {
-    let vm: FeedImageCellViewModel<UIImage>
+protocol FeedImageCellControllerDelegate {
+    func didRequestImage()
+    func didCancelImageRequest()
     
-    init(_ vm: FeedImageCellViewModel<UIImage>) {
-        self.vm = vm
+}
+
+final class FeedImageCellController: FeedImageView {
+    private let delegate: FeedImageCellControllerDelegate
+    private var cell: FeedImageCell?
+    init(_ delegate: FeedImageCellControllerDelegate) {
+        self.delegate = delegate
     }
     
-    func view() -> UITableViewCell {
-        let cell = FeedImageCell()
-        cell.feedImageView.image = nil
-        cell.feedImageRetryButton.isHidden = true
-        cell.locationContainer.isHidden = vm.location == nil
-        cell.locationLabel.text = vm.location
-        cell.descripitonLabel.text = vm.description
-        vm.shimmering = { [weak cell] isShimmering in
-            if isShimmering {
-                cell?.feedimageContainer.startShimmering()
-            } else {
-                cell?.feedimageContainer.stopShimmering()
-            }
-        }
-        vm.didLoadImage = { [weak cell] image in cell?.feedImageView.image = image }
-        vm.shouldHideButton = { [weak cell] shouldHide in cell?.feedImageRetryButton.isHidden = shouldHide }
+    func view(in tableView: UITableView) -> UITableViewCell {
+        cell = tableView.dequeueReusableCell(withIdentifier: "FeedImageCell") as? FeedImageCell
         
-        cell.onRetry = vm.loadImage
-        vm.loadImage()
+        delegate.didRequestImage()
+        return cell!
+    }
+    
+    func display(_ vm: FeedImageCellViewModel<UIImage>) {
+        cell?.feedImageView.image = nil
+        cell?.feedImageRetryButton.isHidden = true
+        cell?.locationContainer.isHidden = vm.location == nil
+        cell?.locationLabel.text = vm.location
+        cell?.descripitonLabel.text = vm.description
+        cell?.onRetry = delegate.didRequestImage
+        cell?.feedImageView.image = vm.image
+        vm.isLoading ? cell?.feedimageContainer.startShimmering() : cell?.feedimageContainer.stopShimmering()
         
-        return cell
+        cell?.feedImageRetryButton.isHidden = !vm.shouldRetry
+        
     }
     
     func preload() {
-        vm.preload()
+        delegate.didRequestImage()
     }
     
     func cancelLoad() {
-        vm.cancel()
+        cell = nil
+        delegate.didCancelImageRequest()
     }
 }

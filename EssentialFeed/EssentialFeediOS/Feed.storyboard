@@ -79,6 +79,9 @@ label</string>
                                                             <rect key="frame" x="0.0" y="0.0" width="374" height="374"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                                             <state key="normal" title="⚜️↻"/>
+                                                            <connections>
+                                                                <action selector="retryButtonTapped" destination="QWJ-AS-40S" eventType="touchUpInside" id="cGb-mV-BTL"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
@@ -120,6 +123,14 @@ label</string>
                                         <constraint firstAttribute="bottomMargin" secondItem="keN-MB-VJh" secondAttribute="bottom" priority="999" constant="6" id="z75-Wp-pbv"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descripitonLabel" destination="0tT-dv-tBb" id="kwz-jK-E7M"/>
+                                    <outlet property="feedImageRetryButton" destination="sTD-SA-Vxb" id="dJr-to-mTA"/>
+                                    <outlet property="feedImageView" destination="o0j-UC-In5" id="z7T-GF-2ez"/>
+                                    <outlet property="feedimageContainer" destination="W8O-dx-NQo" id="XQ9-S6-uX2"/>
+                                    <outlet property="locationContainer" destination="aEE-pc-9G4" id="ZLi-Me-CNu"/>
+                                    <outlet property="locationLabel" destination="l67-nS-7ny" id="WzG-qm-pdf"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
