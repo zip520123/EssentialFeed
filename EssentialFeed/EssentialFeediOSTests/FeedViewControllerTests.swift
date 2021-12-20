@@ -258,15 +258,19 @@ final class FeedViewControllerTests: XCTestCase {
         
     }
     
+    fileprivate func anyImageData() -> Data {
+        return UIImage.make(with: .red).pngData()!
+    }
+    
     func test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
         loader.completeFeedLoading(with: [makeImage()], at: 0)
         
         let view = sut.simulateFeedImageViewNotVisiable(at: 0)
-        loader.completeImageLoading(with: UIImage.make(with: .red).pngData()!, at: 0)
+        loader.completeImageLoading(with: anyImageData(), at: 0)
         
-        XCTAssertNil(view?.renderedImage)
+        XCTAssertNil(view?.renderedImage, "Expected no rendered image when an image load finishes after the view is not visiable anymore")
     }
     
     //MARK: - Helpers
