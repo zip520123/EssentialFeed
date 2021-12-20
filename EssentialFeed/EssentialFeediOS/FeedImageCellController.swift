@@ -33,7 +33,8 @@ final class FeedImageCellController: FeedImageView {
         cell?.locationLabel.text = vm.location
         cell?.descripitonLabel.text = vm.description
         cell?.onRetry = delegate.didRequestImage
-        cell?.feedImageView.image = vm.image
+        cell?.feedImageView.setImageAnimated(vm.image)
+        
         vm.isLoading ? cell?.feedimageContainer.startShimmering() : cell?.feedimageContainer.stopShimmering()
         
         cell?.feedImageRetryButton.isHidden = !vm.shouldRetry
