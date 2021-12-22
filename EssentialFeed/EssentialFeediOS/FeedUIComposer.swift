@@ -20,7 +20,7 @@ public final class FeedUIComposer {
         let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
         let controller = storyboard.instantiateInitialViewController() as! FeedViewController
         
-        
+        controller.title = FeedPresenter.title
         controller.delegate = presentationAdapter
         
         let presenter = FeedPresenter(
