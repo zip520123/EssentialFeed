@@ -30,8 +30,8 @@
 		E74128C72713003800409E54 /* Cache+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74128C42713003800409E54 /* Cache+CoreDataClass.swift */; };
 		E74128C82713003800409E54 /* Feed+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74128C52713003800409E54 /* Feed+CoreDataClass.swift */; };
 		E74128CE2713005E00409E54 /* NSManagedObjectContext+Stub.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74128CD2713005E00409E54 /* NSManagedObjectContext+Stub.swift */; };
-		E742CAC12773AA270084E091 /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = E742CAC02773AA270084E091 /* Feed.strings */; };
 		E742CAC827759D510084E091 /* FeedViewControllerTests+Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = E742CAC727759D510084E091 /* FeedViewControllerTests+Localization.swift */; };
+		E742CAD327759EAB0084E091 /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = E742CAD527759EAB0084E091 /* Feed.strings */; };
 		E752B92426F39274002350FE /* ValidateFeedCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E752B92326F39274002350FE /* ValidateFeedCacheUseCaseTests.swift */; };
 		E752B92926F39974002350FE /* FeedCacheTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E752B92826F39974002350FE /* FeedCacheTestHelpers.swift */; };
 		E752B92E26F39A6B002350FE /* ShareTestsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E752B92D26F39A6B002350FE /* ShareTestsHelpers.swift */; };
@@ -147,8 +147,8 @@
 		E74128C42713003800409E54 /* Cache+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Cache+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E74128C52713003800409E54 /* Feed+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Feed+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E74128CD2713005E00409E54 /* NSManagedObjectContext+Stub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Stub.swift"; sourceTree = "<group>"; };
-		E742CAC02773AA270084E091 /* Feed.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Feed.strings; sourceTree = "<group>"; };
 		E742CAC727759D510084E091 /* FeedViewControllerTests+Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedViewControllerTests+Localization.swift"; sourceTree = "<group>"; };
+		E742CAD427759EAB0084E091 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Feed.strings; sourceTree = "<group>"; };
 		E752B92326F39274002350FE /* ValidateFeedCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateFeedCacheUseCaseTests.swift; sourceTree = "<group>"; };
 		E752B92826F39974002350FE /* FeedCacheTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCacheTestHelpers.swift; sourceTree = "<group>"; };
 		E752B92D26F39A6B002350FE /* ShareTestsHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTestsHelpers.swift; sourceTree = "<group>"; };
@@ -412,7 +412,7 @@
 				E7871DFA275AA29300E5DFEF /* FeedImageCellViewModel.swift */,
 				E7871E02275EB58C00E5DFEF /* FeedPresenter.swift */,
 				E7CDF65A276CFA6B009E6495 /* FeedImagePresenter.swift */,
-				E742CAC02773AA270084E091 /* Feed.strings */,
+				E742CAD527759EAB0084E091 /* Feed.strings */,
 			);
 			name = Presenter;
 			sourceTree = "<group>";
@@ -636,7 +636,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E742CAC12773AA270084E091 /* Feed.strings in Resources */,
+				E742CAD327759EAB0084E091 /* Feed.strings in Resources */,
 				E7D0E0A327677B890046FA6D /* Feed.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -801,6 +801,17 @@
 			targetProxy = E7E193EF2703B5FF00F1C981 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E742CAD527759EAB0084E091 /* Feed.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E742CAD427759EAB0084E091 /* en */,
+			);
+			name = Feed.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		E70D25FE272B2677002CB08E /* Debug */ = {
