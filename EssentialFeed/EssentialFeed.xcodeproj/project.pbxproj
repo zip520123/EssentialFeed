@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E70D25F6272B2677002CB08E /* EssentialFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E70D25ED272B2677002CB08E /* EssentialFeediOS.framework */; };
-		E70D2617272C934A002CB08E /* FeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70D2616272C934A002CB08E /* FeedViewControllerTests.swift */; };
+		E70D2617272C934A002CB08E /* FeedUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70D2616272C934A002CB08E /* FeedUIIntegrationTests.swift */; };
 		E70D261F272DC24B002CB08E /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E71D3D1926C577C900189843 /* EssentialFeed.framework */; platformFilter = ios; };
 		E70D2620272DC24B002CB08E /* EssentialFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E71D3D1926C577C900189843 /* EssentialFeed.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E70D2629272DC3A4002CB08E /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7750BC826DE351A00A4184A /* XCTestCase+MemoryLeakTracking.swift */; };
@@ -125,7 +125,7 @@
 		E70D25F0272B2677002CB08E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E70D25F5272B2677002CB08E /* EssentialFeediOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeediOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70D25FC272B2677002CB08E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E70D2616272C934A002CB08E /* FeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTests.swift; sourceTree = "<group>"; };
+		E70D2616272C934A002CB08E /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
 		E70F14962771063600211F60 /* UITableView+Dequeueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeueing.swift"; sourceTree = "<group>"; };
 		E70F149D277107D400211F60 /* UIImageView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Animations.swift"; sourceTree = "<group>"; };
 		E716274626ECE6A20051B61F /* CacheFeedUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFeedUseCaseTests.swift; sourceTree = "<group>"; };
@@ -250,7 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				E70D25FC272B2677002CB08E /* Info.plist */,
-				E70D2616272C934A002CB08E /* FeedViewControllerTests.swift */,
+				E70D2616272C934A002CB08E /* FeedUIIntegrationTests.swift */,
 				E742CAC727759D510084E091 /* FeedViewControllerTests+Localization.swift */,
 			);
 			path = EssentialFeediOSTests;
@@ -701,7 +701,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E70D2617272C934A002CB08E /* FeedViewControllerTests.swift in Sources */,
+				E70D2617272C934A002CB08E /* FeedUIIntegrationTests.swift in Sources */,
 				E70D2629272DC3A4002CB08E /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				E742CAC827759D510084E091 /* FeedViewControllerTests+Localization.swift in Sources */,
 			);
