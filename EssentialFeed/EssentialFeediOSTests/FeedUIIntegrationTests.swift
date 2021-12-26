@@ -267,10 +267,6 @@ final class FeedUIIntegrationTests: XCTestCase {
         
     }
     
-    fileprivate func anyImageData() -> Data {
-        return UIImage.make(with: .red).pngData()!
-    }
-    
     func test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
@@ -293,6 +289,10 @@ final class FeedUIIntegrationTests: XCTestCase {
         return (sut, loader)
     }
     
+    fileprivate func anyImageData() -> Data {
+        return UIImage.make(with: .red).pngData()!
+    }
+
     private func makeImage(description: String? = nil, location: String? = nil, url: URL = URL(string: "http://any-url.com")!) -> FeedImage {
         FeedImage(id: UUID(), description: description, location: location, url: url)
     }
