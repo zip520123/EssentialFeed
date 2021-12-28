@@ -13,17 +13,36 @@ public final class FeedUIComposer {
     
     public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
         
-        let presentationAdapter = FeedLoaderPresentationAdapter()
+        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader))
         
         let controller = FeedViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
         
-        let presenter = FeedPresenter(
+        presentationAdapter.presenter = FeedPresenter(
             feedView: FeedViewAdapter(controller: controller, imageLoader: imageLoader),
             loadingView: WeakRefVirturalProxy(controller))
-        presentationAdapter.presenter = presenter
-        presentationAdapter.feedLoader = feedLoader
          
         return controller
+    }
+    
+}
+
+private final class MainQueueDispatchDecorator: FeedLoader {
+    
+    private let decoratee: FeedLoader
+    internal init(decoratee: FeedLoader) {
+        self.decoratee = decoratee
+    }
+    
+    func load(completion: @escaping (FeedLoader.Result) -> Void) {
+        decoratee.load { (result) in
+            if Thread.isMainThread {
+                completion(result)
+            } else {
+                DispatchQueue.main.async {
+                    completion(result)
+                }
+            }
+        }
     }
     
 }
@@ -102,8 +121,12 @@ private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, 
 
 private final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
 
-    var feedLoader: FeedLoader?
+    var feedLoader: FeedLoader
     var presenter: FeedPresenter?
+    
+    init(feedLoader: FeedLoader) {
+        self.feedLoader = feedLoader
+    }
     
     func didRequestFeedRefresh() {
         loadFeed()
@@ -112,7 +135,7 @@ private final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
     func loadFeed() {
         presenter?.didStartLoadingFeed()
         
-        feedLoader?.load { [weak self] result in
+        feedLoader.load { [weak self] result in
             switch result {
             case let .success(feeds):
                 self?.presenter?.didFinishLoadingFeed(with: feeds)
