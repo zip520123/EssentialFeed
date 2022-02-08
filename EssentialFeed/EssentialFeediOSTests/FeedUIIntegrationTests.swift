@@ -307,6 +307,24 @@ final class FeedUIIntegrationTests: XCTestCase {
         
         wait(for: [exp], timeout: 1)
     }
+
+    func test_loadFail_displayErrorMsg() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+
+        loader.completeFeedLoadingWithError()
+        XCTAssertTrue(sut.errorViewIsVisible())
+    }
+
+    func test_tapErrorMsg_hideErrorView() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoadingWithError()
+        sut.simulateTapOnErrorMessage()
+        XCTAssertFalse(sut.errorViewIsVisible())
+    }
     
     //MARK: - Helpers
     
@@ -356,7 +374,7 @@ final class FeedUIIntegrationTests: XCTestCase {
             feedRequests[index](.success(feed))
         }
         
-        func completeFeedLoadingWithError(at index: Int) {
+        func completeFeedLoadingWithError(at index: Int = 0) {
             let error = NSError(domain: "Any Error", code: 0, userInfo: nil)
             feedRequests[index](.failure(error))
         }
@@ -400,6 +418,10 @@ final class FeedUIIntegrationTests: XCTestCase {
 private extension FeedViewController {
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
+    }
+
+    func simulateTapOnErrorMessage() {
+        errorView.button.simulateTap()
     }
     
     @discardableResult

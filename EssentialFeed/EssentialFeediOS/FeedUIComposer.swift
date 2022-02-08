@@ -19,7 +19,8 @@ public final class FeedUIComposer {
         
         presentationAdapter.presenter = FeedPresenter(
             feedView: FeedViewAdapter(controller: controller, imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)),
-            loadingView: WeakRefVirturalProxy(controller))
+            loadingView: WeakRefVirturalProxy(controller),
+            feedErrorView: WeakRefVirturalProxy(controller))
          
         return controller
     }
@@ -141,5 +142,11 @@ extension WeakRefVirturalProxy: FeedLoadingView where T: FeedLoadingView {
 extension WeakRefVirturalProxy: FeedImageView where T: FeedImageView, T.Image == UIImage {
     func display(_ model: FeedImageCellViewModel<UIImage>) {
         object?.display(model)
+    }
+}
+
+extension WeakRefVirturalProxy: FeedErrorView where T: FeedErrorView {
+    func display(_ viewModel: FeedErrorViewModel) {
+        object?.display(viewModel)
     }
 }
