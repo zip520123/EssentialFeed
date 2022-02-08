@@ -9,7 +9,7 @@ class FeedPresenterTests: XCTestCase {
     func test_init_doesNotSendMessageToView() {
         let (_, view) = makeSUT()
 
-        XCTAssertTrue(view.message.isEmpyt)
+        XCTAssertTrue(view.msg.isEmpty)
     }
 
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedPresenter, view: ViewSpy) {

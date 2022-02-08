@@ -11,8 +11,8 @@ import CoreData
 extension NSManagedObjectContext {
 	static func alwaysFailingFetchStub() -> Stub {
 		Stub(
-			#selector(NSManagedObjectContext.fetch(_:)),
-			#selector(Stub.fetch(_:))
+			#selector(NSManagedObjectContext.__execute(_:)),
+			#selector(Stub.execute(_:))
 		)
 	}
 
@@ -32,7 +32,7 @@ extension NSManagedObjectContext {
 			self.destination = destination
 		}
 
-		@objc func fetch(_ request: NSFetchRequest<NSFetchRequestResult>) throws -> [Any] {
+		@objc func execute(_: Any) throws -> Any {
 			throw anyNSError()
 		}
 
