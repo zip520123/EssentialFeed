@@ -15,14 +15,6 @@ protocol FeedLoadingView {
     func display(viewModel: FeedLoadingViewModel)
 }
 
-protocol FeedErrorView {
-    func display(_ viewModel: FeedErrorViewModel)
-}
-
-struct FeedErrorViewModel {
-    let errorMessage: String?
-}
-
 struct FeedViewModel {
     let feeds: [FeedImage]
 }
