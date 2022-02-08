@@ -325,6 +325,15 @@ final class FeedUIIntegrationTests: XCTestCase {
         sut.simulateTapOnErrorMessage()
         XCTAssertFalse(sut.errorViewIsVisible())
     }
+
+    func test_simulatePullRequest_hideErrorView() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoadingWithError()
+        sut.simulateUserInitiatedFeedReload()
+        XCTAssertFalse(sut.errorViewIsVisible())
+    }
     
     //MARK: - Helpers
     
