@@ -9,13 +9,9 @@ import EssentialFeed
 
 
 
-struct FeedViewModel {
-    let feeds: [FeedImage]
-}
 
-protocol FeedView {
-    func display(viewModel: FeedViewModel)
-}
+
+
 
 final class FeedPresenter {
     let feedView: FeedView
