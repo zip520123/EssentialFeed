@@ -3,7 +3,7 @@
 //
 
 import UIKit
-
+import EssentialFeed
 public final class ErrorView: UIView {
 	@IBOutlet private(set) public var button: UIButton!
 
@@ -43,7 +43,7 @@ public final class ErrorView: UIView {
 }
 
 extension ErrorView: FeedErrorView {
-	func display(_ viewModel: FeedErrorViewModel) {
+    public func display(_ viewModel: FeedErrorViewModel) {
 		if let msg = viewModel.errorMessage {
 			show(message: msg)
 		} else {
