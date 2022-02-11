@@ -40,6 +40,10 @@ final class FeedPresenter {
         feedView.display(viewModel: FeedViewModel(feeds: feed))
         loadingView.display(viewModel: FeedLoadingViewModel(isLoading: false))
     }
+    func didFinishLoadingFeed(with error: Error) {
+        loadingView.display(viewModel: FeedLoadingViewModel(isLoading: false))
+        feedErrorView.display(FeedErrorViewModel(errorMessage: error.localizedDescription))
+    }
 }
 class FeedPresenterTests: XCTestCase {
     func test_init_doesNotSendMessageToView() {
@@ -70,6 +74,17 @@ class FeedPresenterTests: XCTestCase {
             .loading(isLoading: false)
         ])
 
+    }
+
+    func test_finishedLoadingFeed_displayErrorAndStopsLoading() {
+        let (sut, view) = makeSUT()
+        let error = anyNSError()
+        sut.didFinishLoadingFeed(with: error)
+
+        XCTAssertEqual(view.msg, [
+            .error(msg: error.localizedDescription),
+            .loading(isLoading: false)
+        ])
     }
 
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedPresenter, view: ViewSpy) {
