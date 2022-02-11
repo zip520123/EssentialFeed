@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8F24669F27B2E8FE00CA7247 /* FeedPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F24669E27B2E8FE00CA7247 /* FeedPresenterTests.swift */; };
+		8F47455E27B6EDEC008C41EB /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F47456027B6EDEC008C41EB /* Feed.strings */; };
+		8F47456427B6EF9A008C41EB /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F47456327B6EF9A008C41EB /* Feed.strings */; };
 		8FA5C25727B25030006386E8 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA5C25627B25030006386E8 /* ErrorView.swift */; };
 		E70D25F6272B2677002CB08E /* EssentialFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E70D25ED272B2677002CB08E /* EssentialFeediOS.framework */; };
 		E70D2617272C934A002CB08E /* FeedUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70D2616272C934A002CB08E /* FeedUIIntegrationTests.swift */; };
@@ -126,6 +128,10 @@
 
 /* Begin PBXFileReference section */
 		8F24669E27B2E8FE00CA7247 /* FeedPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenterTests.swift; sourceTree = "<group>"; };
+		8F47455F27B6EDEC008C41EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Feed.strings; sourceTree = "<group>"; };
+		8F47456127B6EDEE008C41EB /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
+		8F47456227B6EDEF008C41EB /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
+		8F47456327B6EF9A008C41EB /* Feed.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Feed.strings; sourceTree = "<group>"; };
 		8FA5C25627B25030006386E8 /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		E70D25ED272B2677002CB08E /* EssentialFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EssentialFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70D25F0272B2677002CB08E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -248,6 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				8F24669E27B2E8FE00CA7247 /* FeedPresenterTests.swift */,
+				8F47456027B6EDEC008C41EB /* Feed.strings */,
 			);
 			path = "Feed Presentation";
 			sourceTree = "<group>";
@@ -389,6 +396,7 @@
 				E756326827430A86002B7D0B /* FeedImageCellController.swift */,
 				E756326F27444FE8002B7D0B /* FeedUIComposer.swift */,
 				E7D0E0A227677B890046FA6D /* Feed.storyboard */,
+				8F47456327B6EF9A008C41EB /* Feed.strings */,
 				E70F14962771063600211F60 /* UITableView+Dequeueing.swift */,
 				E70F149D277107D400211F60 /* UIImageView+Animations.swift */,
 				E77978E9278064DF0035AD3B /* MainQueueDistpatchDecorator.swift */,
@@ -662,6 +670,7 @@
 			files = (
 				E742CAD327759EAB0084E091 /* Feed.strings in Resources */,
 				E7D0E0A327677B890046FA6D /* Feed.storyboard in Resources */,
+				8F47456427B6EF9A008C41EB /* Feed.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,6 +692,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F47455E27B6EDEC008C41EB /* Feed.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -831,6 +841,16 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		8F47456027B6EDEC008C41EB /* Feed.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8F47455F27B6EDEC008C41EB /* en */,
+				8F47456127B6EDEE008C41EB /* el */,
+				8F47456227B6EDEF008C41EB /* pt-BR */,
+			);
+			name = Feed.strings;
+			sourceTree = "<group>";
+		};
 		E742CAD527759EAB0084E091 /* Feed.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
