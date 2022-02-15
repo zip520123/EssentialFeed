@@ -33,6 +33,15 @@ class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
             isLoading: true,
             shouldRetry: false))
     }
+
+    func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+        view.display(FeedImageCellViewModel(
+            description: model.description,
+            location: model.location,
+            image: nil,
+            isLoading: false,
+            shouldRetry: false))
+    }
 }
 
 class FeedImagePresenterTests: XCTestCase {
@@ -51,13 +60,26 @@ class FeedImagePresenterTests: XCTestCase {
 
         XCTAssertEqual(msg.description, image.description)
         XCTAssertEqual(msg.location, image.location)
-        XCTAssertEqual(msg.image, nil)
+        XCTAssertNil(msg.image)
         XCTAssertEqual(msg.isLoading, true)
         XCTAssertEqual(msg.shouldRetry, false)
     }
 
-    private class ViewSpy: FeedImageView {
+    func test_finishLoadingImageData() throws {
+        let (view, sut) = makeSUT()
+        let image = uniqueImage()
 
+        sut.didFinishLoadingImageData(with: Data(), for: image)
+        XCTAssertEqual(view.displayEvent.count, 1)
+        let msg = try XCTUnwrap(view.displayEvent.first)
+        XCTAssertEqual(msg.description, image.description)
+        XCTAssertEqual(msg.location, image.location)
+        XCTAssertNil(msg.image)
+        XCTAssertEqual(msg.isLoading, false)
+        XCTAssertEqual(msg.shouldRetry, false)
+    }
+
+    private class ViewSpy: FeedImageView {
         private(set) var displayEvent = [FeedImageCellViewModel<AnyImage>]()
         func display(_ model: FeedImageCellViewModel<AnyImage>) {
             displayEvent.append(model)
