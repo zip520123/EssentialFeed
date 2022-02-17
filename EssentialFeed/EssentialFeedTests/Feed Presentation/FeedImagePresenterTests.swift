@@ -21,10 +21,14 @@ protocol FeedImageView {
 }
 
 class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
-    let view: View
-    init(_ view: View) {
+    private let view: View
+    private let imageTransformer: (Data) -> Image?
+
+    init(_ view: View, imageTransformer: @escaping (Data) -> Image?) {
         self.view = view
+        self.imageTransformer = imageTransformer
     }
+
     func didStartLoadingImageData(for model: FeedImage) {
         view.display(FeedImageCellViewModel(
             description: model.description,
@@ -35,12 +39,13 @@ class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
     }
 
     func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+        let image = imageTransformer(data)
         view.display(FeedImageCellViewModel(
             description: model.description,
             location: model.location,
-            image: nil,
+            image: image,
             isLoading: false,
-            shouldRetry: true))
+            shouldRetry: image == nil))
     }
 
     func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
@@ -102,6 +107,24 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertEqual(msg.shouldRetry, true)
     }
 
+    func test_didFinishLoadingImageData_displayImageOnSuccessTransformation() throws {
+        let image = uniqueImage()
+        let transformedData = AnyImage()
+        let tf: ((Data)->AnyImage?) = { _ in transformedData }
+        let (view, sut) = makeSUT(tf: tf)
+
+        sut.didFinishLoadingImageData(with: Data(), for: image)
+
+        XCTAssertEqual(view.displayEvent.count, 1)
+        let msg = try XCTUnwrap(view.displayEvent.first)
+        XCTAssertEqual(msg.description, image.description)
+        XCTAssertEqual(msg.location, image.location)
+        XCTAssertEqual(msg.image, transformedData)
+        XCTAssertEqual(msg.isLoading, false)
+        XCTAssertEqual(msg.shouldRetry, false)
+    }
+
+
     private class ViewSpy: FeedImageView {
         private(set) var displayEvent = [FeedImageCellViewModel<AnyImage>]()
         func display(_ model: FeedImageCellViewModel<AnyImage>) {
@@ -109,9 +132,9 @@ class FeedImagePresenterTests: XCTestCase {
         }
     }
 
-    private func makeSUT() -> (ViewSpy, FeedImagePresenter<ViewSpy, AnyImage>) {
+    private func makeSUT(tf: @escaping (Data)-> AnyImage? = {_ in nil}) -> (ViewSpy, FeedImagePresenter<ViewSpy, AnyImage>) {
         let view = ViewSpy()
-        let sut = FeedImagePresenter(view)
+        let sut = FeedImagePresenter(view, imageTransformer: tf)
         return (view, sut)
     }
 
