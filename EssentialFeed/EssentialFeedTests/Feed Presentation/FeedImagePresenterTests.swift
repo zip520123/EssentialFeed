@@ -80,7 +80,8 @@ class FeedImagePresenterTests: XCTestCase {
     }
 
     func test_didFinishLoadingImageData_displaysRetryOnFailedImageTransformation() throws {
-        let (view, sut) = makeSUT()
+        let failTf: ((Data)->AnyImage?) = {_ in nil}
+        let (view, sut) = makeSUT(tf: failTf)
         let image = uniqueImage()
 
         sut.didFinishLoadingImageData(with: Data(), for: image)
