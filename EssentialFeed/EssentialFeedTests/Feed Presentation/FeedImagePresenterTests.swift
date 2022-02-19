@@ -133,9 +133,11 @@ class FeedImagePresenterTests: XCTestCase {
         }
     }
 
-    private func makeSUT(tf: @escaping (Data)-> AnyImage? = {_ in nil}) -> (ViewSpy, FeedImagePresenter<ViewSpy, AnyImage>) {
+    private func makeSUT(tf: @escaping (Data)-> AnyImage? = {_ in nil}, file: StaticString = #file, line: UInt = #line) -> (ViewSpy, FeedImagePresenter<ViewSpy, AnyImage>) {
         let view = ViewSpy()
         let sut = FeedImagePresenter(view, imageTransformer: tf)
+        trackForMemoryLeaks(view, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (view, sut)
     }
 
