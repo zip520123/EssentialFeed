@@ -1,25 +1,23 @@
 import XCTest
+import EssentialFeed
 
-class RemoteImageDataLoaderTask: FeedImageDataLoaderTask {
-    func cancel() {
+class RemoteImageDataLoader {
 
-    }
-}
-class RemoteImageDataLoader: FeedImageDataLoader {
-    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
-        return RemoteImageDataLoaderTask()
-    }
 }
 
 class LoadImageFromRemoteUseCaseTests: XCTestCase {
-//    func test_init_loadData() {
-//        let sut = RemoteImageDataLoader()
-//        var spy = [FeedImageDataLoader.Result]()
-//        sut.loadImageData(from: anyURL()) { result in
-//            spy.append(result)
-//        }
-//        XCTAssertEqual(spy, [])
-//    }
+    func test_init_doesNotPerformAnyURLRequest() {
+        let (client, _) = makeSUT()
+        XCTAssertEqual(client.requests, [])
 
+    }
+
+    private func makeSUT() -> (HTTPClientSpy, RemoteImageDataLoader) {
+
+        return (HTTPClientSpy(), RemoteImageDataLoader())
+    }
+    private class HTTPClientSpy {
+        var requests = [URL]()
+    }
 
 }
