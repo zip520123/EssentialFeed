@@ -12,9 +12,12 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
 
     }
 
-    private func makeSUT() -> (HTTPClientSpy, RemoteImageDataLoader) {
-
-        return (HTTPClientSpy(), RemoteImageDataLoader())
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (HTTPClientSpy, RemoteImageDataLoader) {
+        let spy = HTTPClientSpy()
+        let sut = RemoteImageDataLoader()
+        trackForMemoryLeaks(spy, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return (spy, sut)
     }
     private class HTTPClientSpy {
         var requests = [URL]()
