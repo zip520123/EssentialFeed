@@ -1,5 +1,5 @@
 import UIKit
-import EssentialFeed
+
 public protocol FeedImageDataLoaderTask {
     func cancel()
 }
