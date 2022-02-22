@@ -10,14 +10,17 @@ class RemoteImageDataLoader {
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) {
         client.get(from: url, completion: {result in
             switch result {
+            case let .success(_):
+                completion(.failure(Error.invalidData))
             case let .failure(error):
                 completion(.failure(error))
-            default:
-                break
             }
         })
     }
 
+    public enum Error: Swift.Error {
+        case invalidData
+    }
 }
 
 class LoadImageFromRemoteUseCaseTests: XCTestCase {
@@ -50,6 +53,20 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
         }
     }
 
+
+
+    func test_loadImageDataFromURL_deliversInvalidDataErrorOnNon200HTTPResponse() {
+        let (client, sut) = makeSUT()
+        let samples = [199, 201, 300, 400, 500]
+        samples.enumerated().forEach { index, code in
+            expect(sut, toCompleteWith: .failure(RemoteImageDataLoader.Error.invalidData), when: {
+                client.complete(status: code, data: Data(), at: index)
+            })
+        }
+
+    }
+
+
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (HTTPClientSpy, RemoteImageDataLoader) {
         let spy = HTTPClientSpy()
         let sut = RemoteImageDataLoader(client: spy)
@@ -68,6 +85,11 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
 
         func complete(with error: Error, at index: Int = 0){
             msgs[index].1(.failure(error))
+        }
+
+        func complete(status code: Int, data: Data, at index: Int = 0) {
+            let res = HTTPURLResponse(url: msgs[index].0, statusCode: code, httpVersion: nil, headerFields: nil)!
+            msgs[index].1(.success((data, res)))
         }
     }
 
