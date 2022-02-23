@@ -99,8 +99,6 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
         XCTAssertTrue(results.isEmpty)
     }
 
-
-
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (HTTPClientSpy, RemoteImageDataLoader) {
         let spy = HTTPClientSpy()
         let sut = RemoteImageDataLoader(client: spy)
@@ -109,12 +107,18 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
         return (spy, sut)
     }
     private class HTTPClientSpy: HTTPClient {
+        private struct Task: HTTPClientTask {
+            func cancel() {}
+        }
+
         private var msgs = [(URL, (HTTPClient.Result) -> Void)]()
         var requests: [URL] {
             msgs.map{$0.0}
         }
-        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
+
+        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
             msgs.append((url,completion))
+            return Task()
         }
 
         func complete(with error: Error, at index: Int = 0){

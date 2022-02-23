@@ -14,8 +14,15 @@ public class URLSessionHTTPClient: HTTPClient {
     }
     
     private struct UnexpectedValuesRepresentation: Error {}
+
+    private struct URLSessionHTTPTask: HTTPClientTask {
+        let uRLSessionDataTask: URLSessionDataTask
+        func cancel() {
+            uRLSessionDataTask.cancel()
+        }
+    }
     
-    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void ) {
+    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void ) -> HTTPClientTask {
         let task = session.dataTask(with: url) { (data, response, error) in
             completion(Result {
                 if let error = error {
@@ -29,6 +36,8 @@ public class URLSessionHTTPClient: HTTPClient {
             
         }
         task.resume()
+
+        return URLSessionHTTPTask(uRLSessionDataTask: task)
     }
     
 }
