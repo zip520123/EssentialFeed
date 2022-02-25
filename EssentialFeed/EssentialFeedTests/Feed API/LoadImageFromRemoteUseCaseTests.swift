@@ -6,8 +6,9 @@ class RemoteImageDataLoader {
     init(client: HTTPClient) {
         self.client = client
     }
-
-    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) {
+    
+    @discardableResult
+    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> HTTPClientTask {
         client.get(from: url, completion: { [weak self] result in
             guard self != nil else { return }
             switch result {
@@ -38,15 +39,15 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
     func test_loadImageData() {
         let (client, sut) = makeSUT()
         let url = anyURL()
-        sut.loadImageData(from: url,completion: {_ in})
+        let _ = sut.loadImageData(from: url,completion: {_ in})
         XCTAssertEqual(client.requests, [url])
     }
 
     func test_loadImageTwice() {
         let (client, sut) = makeSUT()
         let url = anyURL()
-        sut.loadImageData(from: url,completion: {_ in})
-        sut.loadImageData(from: url,completion: {_ in})
+        let _ = sut.loadImageData(from: url,completion: {_ in})
+        let _ = sut.loadImageData(from: url,completion: {_ in})
         XCTAssertEqual(client.requests, [url, url])
     }
 
@@ -99,6 +100,15 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
         XCTAssertTrue(results.isEmpty)
     }
 
+    func test_cancelLoadImageDataURLTask_cancelsClientURLRequest() {
+        let (client, sut) = makeSUT()
+        let url = URL(string: "https://a-given-url.com")!
+        let task = sut.loadImageData(from: url, completion: {_ in})
+        XCTAssertTrue(client.cancelledURLs.isEmpty, "Expected no cancelled URL request until task is cancelled")
+        task.cancel()
+        XCTAssertEqual(client.cancelledURLs, [url], "Expected cancelled URL request after task is cancelled")
+    }
+
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (HTTPClientSpy, RemoteImageDataLoader) {
         let spy = HTTPClientSpy()
         let sut = RemoteImageDataLoader(client: spy)
@@ -108,7 +118,10 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
     }
     private class HTTPClientSpy: HTTPClient {
         private struct Task: HTTPClientTask {
-            func cancel() {}
+            let callback: ()->()
+            func cancel() {
+                callback()
+            }
         }
 
         private var msgs = [(URL, (HTTPClient.Result) -> Void)]()
@@ -116,9 +129,11 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
             msgs.map{$0.0}
         }
 
+        private(set) var cancelledURLs = [URL]()
+
         func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
             msgs.append((url,completion))
-            return Task()
+            return Task { [weak self] in self?.cancelledURLs.append(url) }
         }
 
         func complete(with error: Error, at index: Int = 0){
