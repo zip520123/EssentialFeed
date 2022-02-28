@@ -1,5 +1,5 @@
 
-public final class RemoteImageDataLoader {
+public final class RemoteImageDataLoader: FeedImageDataLoader {
     let client: HTTPClient
     public init(client: HTTPClient) {
         self.client = client
