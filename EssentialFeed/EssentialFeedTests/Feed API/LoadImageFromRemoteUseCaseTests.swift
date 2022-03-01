@@ -23,15 +23,13 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
         XCTAssertEqual(client.requests, [url, url])
     }
 
-    func test_loadImageDataFromURL_deliversErrorOnClientError() {
+    func test_loadImageDataFromURL_deliversConnectivityErrorOnClientError() {
         let (client, sut) = makeSUT()
         let error = NSError(domain: "a client error", code: 0)
-        expect(sut, toCompleteWith: .failure(error)) {
+        expect(sut, toCompleteWith: .failure(RemoteImageDataLoader.Error.connectivity)) {
             client.complete(with: error)
         }
     }
-
-
 
     func test_loadImageDataFromURL_deliversInvalidDataErrorOnNon200HTTPResponse() {
         let (client, sut) = makeSUT()
