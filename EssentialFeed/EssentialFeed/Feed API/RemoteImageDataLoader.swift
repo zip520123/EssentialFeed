@@ -23,12 +23,11 @@ public final class RemoteImageDataLoader: FeedImageDataLoader {
 
     }
 
-    @discardableResult
     public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
         let task = HTTPClientTaskWrapper(completion: completion)
         task.httpClientTask = client.get(from: url, completion: { [weak self] result in
             guard self != nil else { return }
-            
+
             task.complete(with: result.mapError { _ in
                 Error.connectivity
             }.flatMap({ data, res in

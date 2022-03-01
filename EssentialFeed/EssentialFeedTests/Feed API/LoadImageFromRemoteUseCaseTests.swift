@@ -64,7 +64,7 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
         let client = HTTPClientSpy()
         var sut: RemoteImageDataLoader? = RemoteImageDataLoader(client: client)
         var results = [FeedImageDataLoader.Result]()
-        sut?.loadImageData(from: anyURL(), completion: {results.append($0)})
+        _ = sut?.loadImageData(from: anyURL(), completion: {results.append($0)})
         sut = nil
         client.complete(status: 200, data: Data())
         XCTAssertTrue(results.isEmpty)
@@ -107,7 +107,7 @@ class LoadImageFromRemoteUseCaseTests: XCTestCase {
     private func expect(_ sut: RemoteImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, when action: ()->(), file: StaticString = #file, line: UInt = #line) {
         let url = anyURL()
         let exp = expectation(description: "wait for load complete")
-        sut.loadImageData(from: url) { result in
+        _ = sut.loadImageData(from: url) { result in
             switch (result, expectedResult) {
 
             case let (.success(data), .success(expectedData)):
