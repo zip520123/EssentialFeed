@@ -74,11 +74,11 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
     }
 
     private func notFound() -> FeedImageDataLoader.Result {
-        .failure(LocalFeedImageDataLoader.Error.notFound)
+        .failure(LocalFeedImageDataLoader.LoadError.notFound)
     }
 
     private func failed() -> FeedImageDataLoader.Result {
-        return .failure(LocalFeedImageDataLoader.Error.failed)
+        return .failure(LocalFeedImageDataLoader.LoadError.failed)
     }
 
     private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, when action: ()->Void, file: StaticString = #file, line: UInt = #line) {
@@ -88,7 +88,7 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
             switch (result, expectedResult) {
             case let (.success(data), .success(expectedData)):
                 XCTAssertEqual(data, expectedData, file: file, line: line)
-            case (.failure(let error as LocalFeedImageDataLoader.Error), .failure(let expectedError as LocalFeedImageDataLoader.Error)):
+            case (.failure(let error as LocalFeedImageDataLoader.LoadError), .failure(let expectedError as LocalFeedImageDataLoader.LoadError)):
                 XCTAssertEqual(error, expectedError, file: file, line: line)
             default:
                 XCTFail("Expected result \(expectedResult), got \(result) instead", file: file, line: line)
@@ -116,11 +116,11 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
         }
 
         private(set) var receivedMessages = [Msg]()
-        private var completions = [(FeedImageDataStore.Result) -> Void]()
+        private var retrievalCompletions = [(FeedImageDataLoader.Result) -> Void]()
 
-        func retrieve(dataForURL url: URL, completion: @escaping (FeedImageDataStore.Result) -> Void) {
+        func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
             receivedMessages.append(.retreive(dataFor: url))
-            completions.append(completion)
+            retrievalCompletions.append(completion)
         }
 
         func insert(_ data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void) {
@@ -128,11 +128,11 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
         }
 
         func complete(with error: Error, at index: Int = 0) {
-            completions[index](.failure(error))
+            retrievalCompletions[index](.failure(error))
         }
 
         func complete(with data: Data?, at index: Int = 0) {
-            completions[index](.success(data))
+            retrievalCompletions[index](.success(data))
         }
 
     }
