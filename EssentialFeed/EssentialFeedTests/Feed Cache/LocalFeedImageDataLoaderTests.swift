@@ -9,29 +9,35 @@ protocol FeedImageDataStore {
 
 class LocalFeedImageDataLoader: FeedImageDataLoader {
     private class Task: FeedImageDataLoaderTask {
+        var completion: ((FeedImageDataLoader.Result) -> ())?
+
         func cancel() {
+            completion = nil
         }
     }
+
     let store: FeedImageDataStore
     init(store: FeedImageDataStore) {
         self.store = store
     }
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
+        let task = Task()
+        task.completion = completion
         store.retrieve(dataForURL: url) { result in
             switch result {
             case .success(let data):
                 if data == nil {
-                    completion(.failure(Error.notFound))
+                    task.completion?(.failure(Error.notFound))
                 } else {
-                    completion(.success(data!))
+                    task.completion?(.success(data!))
                 }
 
-            case .failure(let error):
-                completion(.failure(Error.failed))
+            case .failure:
+                task.completion?(.failure(Error.failed))
             }
 
         }
-        return Task()
+        return task
     }
     enum Error: Swift.Error {
         case failed
@@ -73,6 +79,20 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
         expect(sut, toCompleteWith: .success(foundData), when: {
             store.complete(with: foundData)
         })
+    }
+
+    func test_loadImageDataFromURL_doesNotDeliverResultAfterCancellingTask() {
+        let (sut, store) = makeSUT()
+        let foundData = anyData()
+        var received = [FeedImageDataLoader.Result]()
+        let task = sut.loadImageData(from: anyURL()) { received.append($0) }
+        task.cancel()
+        store.complete(with: foundData)
+        store.complete(with: .none)
+        store.complete(with: anyNSError())
+
+        XCTAssertTrue(received.isEmpty, "Expected no received results after cancelling task")
+
     }
 
     private func notFound() -> FeedImageDataLoader.Result {
