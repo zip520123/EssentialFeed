@@ -3,7 +3,7 @@ import XCTest
 import EssentialFeed
 
 protocol FeedImageDataStore {
-    typealias Result = Swift.Result<Data, Error>
+    typealias Result = Swift.Result<Data?, Error>
     func retrieve(dataForURL url: URL, completion: @escaping (Result)->())
 }
 
@@ -17,13 +17,20 @@ class LocalFeedImageDataLoader: FeedImageDataLoader {
         self.store = store
     }
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
-        store.retrieve(dataForURL: url) {_ in
-            completion(.failure(Error.failed))
+        store.retrieve(dataForURL: url) { result in
+            switch result {
+            case .success(let data):
+                completion(.failure(Error.notFound))
+            case .failure(let error):
+                completion(.failure(Error.failed))
+            }
+
         }
         return Task()
     }
     enum Error: Swift.Error {
         case failed
+        case notFound
     }
 }
 
@@ -46,6 +53,17 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
             let retrievalError = anyNSError()
             store.complete(with: retrievalError)
         })
+    }
+
+    func test_loadImageDataFromURL_deliversNotFoundErrorOnNotFound() {
+        let (sut, store) = makeSUT()
+        expect(sut, toCompleteWith: notFound(), when: {
+            store.complete(with: .none)
+        })
+    }
+
+    private func notFound() -> FeedImageDataLoader.Result {
+        .failure(LocalFeedImageDataLoader.Error.notFound)
     }
 
     private func failed() -> FeedImageDataLoader.Result {
@@ -97,5 +115,10 @@ class LocalFeedImageDataLoaderTests: XCTestCase {
         func complete(with error: Error, at index: Int = 0) {
             completions[index](.failure(error))
         }
+
+        func complete(with data: Data?, at index: Int = 0) {
+            completions[index](.success(data))
+        }
+
     }
 }
