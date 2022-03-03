@@ -52,7 +52,7 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
     }
 
     func test_loadImageDataFromURL_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-        let store = FeedStoreSpy()
+        let store = FeedImageDataStoreSpy()
         var sut: LocalFeedImageDataLoader? = LocalFeedImageDataLoader(store: store)
 
         var received = [FeedImageDataLoader.Result]()
@@ -100,39 +100,12 @@ class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
     }
 
 
-    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: FeedStoreSpy) {
-        let store = FeedStoreSpy()
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: FeedImageDataStoreSpy) {
+        let store = FeedImageDataStoreSpy()
         let loader = LocalFeedImageDataLoader(store: store)
         trackForMemoryLeaks(store)
         trackForMemoryLeaks(loader)
         return (loader, store)
     }
 
-    private class FeedStoreSpy: FeedImageDataStore {
-        enum Msg: Equatable {
-            case retreive(dataFor: URL)
-            case insert(data: Data, for: URL)
-        }
-
-        private(set) var receivedMessages = [Msg]()
-        private var retrievalCompletions = [(FeedImageDataLoader.Result) -> Void]()
-
-        func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
-            receivedMessages.append(.retreive(dataFor: url))
-            retrievalCompletions.append(completion)
-        }
-
-        func insert(_ data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void) {
-            receivedMessages.append(.insert(data: data, for: url))
-        }
-
-        func complete(with error: Error, at index: Int = 0) {
-            retrievalCompletions[index](.failure(error))
-        }
-
-        func complete(with data: Data?, at index: Int = 0) {
-            retrievalCompletions[index](.success(data))
-        }
-
-    }
 }
