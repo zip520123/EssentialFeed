@@ -1,7 +1,10 @@
 //
 public protocol FeedImageDataStore {
     typealias Result = Swift.Result<Data?, Error>
+    typealias InsertionResult = Swift.Result<Void, Error>
+
     func retrieve(dataForURL url: URL, completion: @escaping (Result)->())
+    func insert(_ data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void)
 }
 
 public class LocalFeedImageDataLoader: FeedImageDataLoader {
@@ -37,6 +40,13 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader {
         }
         return task
     }
+
+    public func save(_ data: Data, for url: URL) {
+        store.insert(data, for: url) { result in
+            
+        }
+    }
+
     public enum Error: Swift.Error {
         case failed
         case notFound
