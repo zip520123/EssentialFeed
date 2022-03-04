@@ -8,6 +8,17 @@ public protocol FeedImageDataStore {
 }
 
 public class LocalFeedImageDataLoader: FeedImageDataLoader {
+    public typealias SaveResult = Result<Void, Error>
+
+    public enum LoadError: Swift.Error {
+        case failed
+        case notFound
+    }
+
+    public enum SaveError: Error {
+        case failed
+    }
+
     private class LoadImageDataTask: FeedImageDataLoaderTask {
         var completion: ((FeedImageDataLoader.Result) -> ())?
 
@@ -41,13 +52,11 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader {
         return task
     }
 
-    public func save(_ data: Data, for url: URL) {
+    public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult)->Void) {
         store.insert(data, for: url) { result in
+            completion(.failure(SaveError.failed))
         }
     }
 
-    public enum LoadError: Swift.Error {
-        case failed
-        case notFound
-    }
+
 }
