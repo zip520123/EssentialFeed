@@ -10,7 +10,14 @@
 import CoreData
 
 @objc(Feed)
-final class Feed: NSManagedObject {}
+final class Feed: NSManagedObject {
+    @NSManaged var descriptionString: String?
+    @NSManaged var id: UUID
+    @NSManaged var location: String?
+    @NSManaged var url: URL
+    @NSManaged var data: Data?
+    @NSManaged var cache: Cache
+}
 extension Feed {
 	var local: LocalFeedImage {
 		return LocalFeedImage(id: id, description: descriptionString, location: location, url: url)
@@ -27,10 +34,4 @@ extension Feed {
 			return coreDataFeed
 		})
 	}
-
-	@NSManaged var descriptionString: String?
-	@NSManaged var id: UUID
-	@NSManaged var location: String?
-	@NSManaged var url: URL
-	@NSManaged var cache: Cache
 }
