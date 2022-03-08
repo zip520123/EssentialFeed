@@ -34,4 +34,12 @@ extension Feed {
 			return coreDataFeed
 		})
 	}
+
+    static func first(with url: URL, in context: NSManagedObjectContext) throws -> Feed? {
+        let request = NSFetchRequest<Feed>(entityName: entity().name!)
+        request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(Feed.url), url])
+        request.returnsObjectsAsFaults = false
+        request.fetchLimit = 1
+        return try context.fetch(request).first
+    }
 }
