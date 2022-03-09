@@ -13,9 +13,9 @@ extension CoreDataFeedStore: FeedImageDataStore {
         perform { context in
 
             completion(InsertionResult {
-                let image = try Feed.first(with: url, in: context)
-                image?.data = data
-                try context.save()
+                try Feed.first(with: url, in: context)
+                    .map { $0.data = data }
+                    .map { try context.save() }
             })
 
         }
