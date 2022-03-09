@@ -34,7 +34,7 @@ public final class CoreDataFeedStore: FeedStore {
         perform { (context) in
             completion(Result {
                 try Cache.find(in: context).map { cache in
-                    return CacheFeed(feed: cache.localFeeds, timestamp: cache.timestamp)
+                    CacheFeed(feed: cache.localFeeds, timestamp: cache.timestamp)
                 }
             })
 
