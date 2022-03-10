@@ -34,7 +34,7 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
     func test_endToEndTestServerGETFeedImageDataResult_matchesFixedTestAccountData() {
         switch getFeedImageDataResult() {
         case let .success(data)?:
-            XCTAssertFalse(data.isEmpty)
+            XCTAssertFalse(data!.isEmpty)
         case let .failure(error)?:
             XCTFail("Expected successful image data result, got \(error) instead")
         default:
