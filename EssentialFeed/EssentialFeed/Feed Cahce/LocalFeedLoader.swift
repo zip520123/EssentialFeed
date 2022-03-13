@@ -70,7 +70,7 @@ extension LocalFeedLoader: FeedLoader {
                 self.store.deleteCachedFeed(completion: {_ in completion(.success(())) })
                 
             case .failure:
-                self.store.deleteCachedFeed(completion: {_ in completion(.success(())) })
+                self.store.deleteCachedFeed(completion: completion)
             case .success:
                 completion(.success(()))
             }
