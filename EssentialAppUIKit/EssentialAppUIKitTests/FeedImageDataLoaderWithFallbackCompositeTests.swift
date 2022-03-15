@@ -1,6 +1,0 @@
-//
-
-import XCTest
-class RemoteWithFallbackCompositeTests {
-
-}
