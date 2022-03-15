@@ -30,20 +30,7 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         let fallbackFeed = uniqueFeed()
         let sut = makeSUT(primaryResult: .success(primaryFeed), fallbackResult: .success(fallbackFeed))
 
-        let exp = expectation(description: "Wait for load completion")
-
-        sut.load { result in
-            switch result {
-            case let .success(receivedFeed):
-
-                XCTAssertEqual(receivedFeed, primaryFeed)
-            case .failure:
-                XCTFail("Expected successful load, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
-
+        expect(sut, toCompleteWith: .success(primaryFeed))
     }
 
     func test_load_deliversPrimaryFeedOnPrimaryLoaderFailure() {
@@ -51,23 +38,28 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         let fallbackFeed = uniqueFeed()
         let sut = makeSUT(primaryResult: .failure(anyNSError()), fallbackResult: .success(fallbackFeed))
 
+        expect(sut, toCompleteWith: .success(fallbackFeed))
+    }
+
+    // MARK: - Helpers
+
+    private func expect(_ sut: FeedLoader, toCompleteWith expectedResult: FeedLoader.Result) {
         let exp = expectation(description: "Wait for load completion")
 
         sut.load { result in
-            switch result {
-            case let .success(receivedFeed):
+            switch (result, expectedResult) {
+            case let (.success(receivedFeed), .success(expectedFeed)):
 
-                XCTAssertEqual(receivedFeed, fallbackFeed)
-            case .failure:
+                XCTAssertEqual(receivedFeed, expectedFeed)
+            case (.failure, .failure):
+                break
+            default:
                 XCTFail("Expected successful load, got \(result) instead")
             }
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1)
-
     }
-
-    // MARK: - Helpers
 
     private func makeSUT(primaryResult: FeedLoader.Result, fallbackResult: FeedLoader.Result, file: StaticString = #file, line: UInt = #line) -> FeedLoader {
         let primaryLoader = LoaderStub(result: primaryResult)
