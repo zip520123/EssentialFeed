@@ -87,12 +87,21 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
 
         let (sut, primaryLoader, _) = makeSUT()
 
-        expect(sut, toCompeleteWith: .success(expectedData), when: {
+        expect(sut, toCompleteWith: .success(expectedData), when: {
             primaryLoader.complete(with: .success(expectedData))
         })
 
     }
 
+    func test_loadImageData_deliversFallbackDataOnFallbackLoaderSuccess() {
+        let fallbackData = anyData()
+        let (sut, primaryLoader, fallbackLoader) = makeSUT()
+
+        expect(sut, toCompleteWith: .success(fallbackData), when: {
+            primaryLoader.complete(with: .failure(anyNSError()))
+            fallbackLoader.complete(with: .success(fallbackData) )
+        })
+    }
 
 
     private func makeSUT() -> (FeedImageDataLoader, LoaderStub, LoaderStub) {
@@ -105,7 +114,7 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         return (sut, primary, fallback)
     }
 
-    private func expect(_ sut: FeedImageDataLoader, toCompeleteWith expectedResult: FeedImageDataLoader.Result, when action: ()->(), file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: FeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, when action: ()->(), file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "Wait for completion")
         let _ = sut.loadImageData(from: anyURL()) { result in
             switch (result, expectedResult) {
