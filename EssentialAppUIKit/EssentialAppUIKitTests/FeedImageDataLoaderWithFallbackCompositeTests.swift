@@ -30,16 +30,6 @@ class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
 
 }
 class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
-    func test_load_deliversPrimaryImageDataOnPrimaryLoaderSuccess() {
-        let expectedData = anyData()
-
-        let (sut, primaryLoader, _) = makeSUT()
-
-        expect(sut, toCompeleteWith: .success(expectedData), when: {
-            primaryLoader.complete(with: .success(expectedData))
-        })
-
-    }
 
     func test_init_doesNotLoadImageData() {
         let (_, primaryLoader, fallbackLoader) = makeSUT()
@@ -91,6 +81,19 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         XCTAssertTrue(primaryLoader.cancelledURLs.isEmpty, "Expected no cancelled URLs in the primary loader")
         XCTAssertEqual(fallbackLoader.cancelledURLs, [url], "Expected to cancel URL loading from fallback loader")
     }
+
+    func test_load_deliversPrimaryImageDataOnPrimaryLoaderSuccess() {
+        let expectedData = anyData()
+
+        let (sut, primaryLoader, _) = makeSUT()
+
+        expect(sut, toCompeleteWith: .success(expectedData), when: {
+            primaryLoader.complete(with: .success(expectedData))
+        })
+
+    }
+
+
 
     private func makeSUT() -> (FeedImageDataLoader, LoaderStub, LoaderStub) {
         let primary = LoaderStub()
