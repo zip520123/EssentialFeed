@@ -1,5 +1,3 @@
-import UIKit
-
 public protocol FeedImageDataLoaderTask {
     func cancel()
 }
