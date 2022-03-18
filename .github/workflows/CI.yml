@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build and test CI_macOS
-      run: xcodebuild clean build test -workspace EssentialFeed/Essential.xcworkspace -scheme CI_macOS
+      run: xcodebuild clean build test -workspace Essential.xcworkspace -scheme CI_macOS
     - name: Build and test CI_iOS
-      run: xcodebuild clean build test -workspace EssentialFeed/Essential.xcworkspace -scheme CI_iOS
+      run: xcodebuild clean build test -workspace Essential.xcworkspace -scheme CI_iOS
 
