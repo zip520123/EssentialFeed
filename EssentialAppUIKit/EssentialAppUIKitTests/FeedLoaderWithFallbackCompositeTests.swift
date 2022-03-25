@@ -2,7 +2,7 @@ import XCTest
 import EssentialFeed
 import EssentialAppUIKit
 
-class FeedLoaderWithFallbackCompositeTests: XCTestCase {
+class FeedLoaderWithFallbackCompositeTests: XCTestCase, FeedLoaderTestCase {
 
     func test_load_deliversPrimaryFeedOnPrimaryLoaderSuccess() {
         let primaryFeed = uniqueFeed()
@@ -27,24 +27,6 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
     }
 
     // MARK: - Helpers
-
-    private func expect(_ sut: FeedLoader, toCompleteWith expectedResult: FeedLoader.Result) {
-        let exp = expectation(description: "Wait for load completion")
-
-        sut.load { result in
-            switch (result, expectedResult) {
-            case let (.success(receivedFeed), .success(expectedFeed)):
-
-                XCTAssertEqual(receivedFeed, expectedFeed)
-            case (.failure, .failure):
-                break
-            default:
-                XCTFail("Expected successful load, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
-    }
 
     private func makeSUT(primaryResult: FeedLoader.Result, fallbackResult: FeedLoader.Result, file: StaticString = #file, line: UInt = #line) -> FeedLoader {
         let primaryLoader = LoaderStub(result: primaryResult)
