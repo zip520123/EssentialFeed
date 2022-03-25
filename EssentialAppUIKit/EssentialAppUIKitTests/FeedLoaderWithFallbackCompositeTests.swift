@@ -55,20 +55,6 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
-
-
-}
-
-class LoaderStub: FeedLoader {
-    private let result: FeedLoader.Result
-
-    init(result: FeedLoader.Result) {
-        self.result = result
-    }
-
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        completion(result)
-    }
 }
 
 extension XCTestCase {
