@@ -56,22 +56,19 @@ class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         return sut
     }
 
-    private class LoaderStub: FeedLoader {
-        private let result: FeedLoader.Result
 
-        init(result: FeedLoader.Result) {
-            self.result = result
-        }
+}
 
-        func load(completion: @escaping (FeedLoader.Result) -> Void) {
-            completion(result)
-        }
+class LoaderStub: FeedLoader {
+    private let result: FeedLoader.Result
+
+    init(result: FeedLoader.Result) {
+        self.result = result
     }
 
-    private func uniqueFeed() -> [FeedImage] {
-        [FeedImage(id: UUID(), description: nil, location: nil, url: URL(string: "https://any-url.com")!)]
+    func load(completion: @escaping (FeedLoader.Result) -> Void) {
+        completion(result)
     }
-
 }
 
 extension XCTestCase {
@@ -80,6 +77,11 @@ extension XCTestCase {
             XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
         }
     }
+    
+    func uniqueFeed() -> [FeedImage] {
+        [FeedImage(id: UUID(), description: nil, location: nil, url: URL(string: "https://any-url.com")!)]
+    }
+
 }
 
 func anyNSError() -> NSError {
