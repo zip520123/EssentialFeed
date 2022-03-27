@@ -1,8 +1,6 @@
 import XCTest
 import EssentialFeed
-protocol ImageDataCacheLoader {
-    func saveImage(_ data: Data, for url: URL)
-}
+
 class FeedImageDataLoaderCacheDecorater: FeedImageDataLoader {
     let decoratee: FeedImageDataLoader
     let cache: ImageDataCacheLoader
