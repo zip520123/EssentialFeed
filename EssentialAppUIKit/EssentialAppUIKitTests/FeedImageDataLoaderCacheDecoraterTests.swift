@@ -44,6 +44,12 @@ class FeedImageDataLoaderCacheDecoraterTests: XCTestCase {
         expect(sut, toCompleteWith: .success(imageData))
     }
 
+    func test_load_deliversImageDataOnLoaderFailure() {
+        let sut = makeSUT(result: .failure(anyNSError()))
+        let _ = sut.loadImageData(from: anyURL(), completion: { _ in })
+        expect(sut, toCompleteWith: .failure(anyNSError()))
+    }
+
     private func makeSUT(result: FeedImageDataLoader.Result) -> FeedImageDataLoaderCacheDecorater {
         let stub = ImageDataLoaderStub(result: result)
         let sut = FeedImageDataLoaderCacheDecorater(decoratee: stub)
