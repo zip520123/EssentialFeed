@@ -67,6 +67,13 @@ class FeedImageDataLoaderCacheDecoraterTests: XCTestCase {
 
     }
 
+    func test_load_doesNotCacheOnLoaderFailure() {
+        let cache = CacheSpy()
+        let sut = makeSUT(result: .failure(anyNSError()), cache: cache)
+        _ = sut.loadImageData(from: anyURL()) { _ in }
+        XCTAssertTrue(cache.messages.isEmpty)
+    }
+
     private class CacheSpy: ImageDataCacheLoader {
         var messages = [Msg]()
         enum Msg: Equatable {
