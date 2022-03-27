@@ -1,17 +1,24 @@
 import XCTest
 import EssentialFeed
-
+protocol ImageDataCacheLoader {
+    func saveImage(_ data: Data, for url: URL)
+}
 class FeedImageDataLoaderCacheDecorater: FeedImageDataLoader {
     let decoratee: FeedImageDataLoader
-    init(decoratee: FeedImageDataLoader) {
+    let cache: ImageDataCacheLoader
+    init(decoratee: FeedImageDataLoader, cache: ImageDataCacheLoader) {
         self.decoratee = decoratee
+        self.cache = cache
     }
 
     class Task: FeedImageDataLoaderTask {
         func cancel() {}
     }
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result)->Void ) -> FeedImageDataLoaderTask {
-        let _ = decoratee.loadImageData(from: url) { result in
+        let _ = decoratee.loadImageData(from: url) { [weak self] result in
+            if let data = try? result.get() {
+                self?.cache.saveImage(data, for: url)
+            }
             completion(result)
         }
         return Task()
@@ -50,9 +57,30 @@ class FeedImageDataLoaderCacheDecoraterTests: XCTestCase {
         expect(sut, toCompleteWith: .failure(anyNSError()))
     }
 
-    private func makeSUT(result: FeedImageDataLoader.Result) -> FeedImageDataLoaderCacheDecorater {
+    func test_load_cachesLoadedFeedOnLoaderSuccess() {
+        let imageData = Data()
+        let cache = CacheSpy()
+        let sut = makeSUT(result: .success(imageData), cache: cache)
+        let url = anyURL()
+        _ = sut.loadImageData(from: url) { _ in }
+        XCTAssertEqual(cache.messages, [.save(data: imageData, url: url)])
+
+    }
+
+    private class CacheSpy: ImageDataCacheLoader {
+        var messages = [Msg]()
+        enum Msg: Equatable {
+            case save(data: Data, url: URL)
+        }
+        func saveImage(_ data: Data, for url: URL) {
+            messages.append(.save(data: data, url: url))
+        }
+    }
+
+
+    private func makeSUT(result: FeedImageDataLoader.Result, cache: CacheSpy = CacheSpy()) -> FeedImageDataLoaderCacheDecorater {
         let stub = ImageDataLoaderStub(result: result)
-        let sut = FeedImageDataLoaderCacheDecorater(decoratee: stub)
+        let sut = FeedImageDataLoaderCacheDecorater(decoratee: stub, cache: cache)
         trackForMemoryLeaks(sut)
         trackForMemoryLeaks(stub)
         return sut
