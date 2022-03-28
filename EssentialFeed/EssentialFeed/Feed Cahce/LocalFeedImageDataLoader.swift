@@ -7,7 +7,7 @@ public protocol FeedImageDataStore {
     func insert(_ data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void)
 }
 
-public class LocalFeedImageDataLoader: FeedImageDataLoader {
+public class LocalFeedImageDataLoader: FeedImageDataLoader, ImageDataCacheLoader {
     public typealias SaveResult = Result<Void, Error>
 
     public enum LoadError: Swift.Error {

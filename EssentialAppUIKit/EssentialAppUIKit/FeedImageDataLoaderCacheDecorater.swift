@@ -7,16 +7,15 @@ public class FeedImageDataLoaderCacheDecorater: FeedImageDataLoader {
         self.cache = cache
     }
 
-    class Task: FeedImageDataLoaderTask {
-        func cancel() {}
-    }
     public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result)->Void ) -> FeedImageDataLoaderTask {
-        let _ = decoratee.loadImageData(from: url) { [weak self] result in
+        let task = decoratee.loadImageData(from: url) { [weak self] result in
             if let data = try? result.get() {
-                self?.cache.saveImage(data, for: url)
+                self?.cache.save(data, for: url, completion: { res in
+
+                })
             }
             completion(result)
         }
-        return Task()
+        return task
     }
 }

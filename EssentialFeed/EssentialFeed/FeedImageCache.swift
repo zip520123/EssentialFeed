@@ -1,4 +1,4 @@
 
 public protocol ImageDataCacheLoader {
-    func saveImage(_ data: Data, for url: URL)
+    func save(_ data: Data, for url: URL, completion: @escaping (LocalFeedImageDataLoader.SaveResult)->Void)
 }

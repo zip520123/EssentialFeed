@@ -56,7 +56,8 @@ class FeedImageDataLoaderCacheDecoraterTests: XCTestCase {
         enum Msg: Equatable {
             case save(data: Data, url: URL)
         }
-        func saveImage(_ data: Data, for url: URL) {
+
+        func save(_ data: Data, for url: URL, completion: @escaping (LocalFeedImageDataLoader.SaveResult) -> Void) {
             messages.append(.save(data: data, url: url))
         }
     }
