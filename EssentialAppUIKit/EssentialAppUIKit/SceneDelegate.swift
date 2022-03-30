@@ -15,8 +15,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
         guard let _ = (scene as? UIWindowScene) else { return }
-//        let url = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
+        configureWindow()
+    }
 
+    func configureWindow() {
         let url = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
 
         let remoteClient = makeRemoteClient()
@@ -27,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let localFeedLoader = LocalFeedLoader(store: localStore, currentDate: Date.init)
         let localImageLoader = LocalFeedImageDataLoader(store: localStore)
 
-        window?.rootViewController = FeedUIComposer.feedComposedWith(
+        window?.rootViewController = UINavigationController(rootViewController:  FeedUIComposer.feedComposedWith(
             feedLoader: FeedLoaderWithFallbackComposite(
                 primary: FeedLoaderCacheDecorater(
                     decoratee: remoteFeedLoader,
@@ -38,8 +40,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 fallback: FeedImageDataLoaderCacheDecorater(
                     decoratee: remoteImageLoader,
                     cache: localImageLoader)))
+        )
 
-        
     }
 
     func makeRemoteClient() -> HTTPClient {
