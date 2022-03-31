@@ -7,8 +7,8 @@
 
 import UIKit
 
-extension UIView {
-    public var isShimmering: Bool {
+public extension UIView {
+    var isShimmering: Bool {
         layer.mask?.animation(forKey: shimmerAnimationKey) != nil
     }
     

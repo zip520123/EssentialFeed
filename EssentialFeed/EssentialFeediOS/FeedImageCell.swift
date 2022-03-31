@@ -16,7 +16,7 @@ public class FeedImageCell: UITableViewCell {
     @IBOutlet private(set) public var feedImageView: UIImageView!
     @IBOutlet private(set) public var feedImageRetryButton: UIButton!
     
-    var onRetry: (()->())?
+    public var onRetry: (()->())?
     
     @IBAction func retryButtonTapped() {
         onRetry?()

@@ -6,16 +6,16 @@
 //
 import EssentialFeed
 
-struct FeedImageCellViewModel<Image> {
+public struct FeedImageCellViewModel<Image> {
     
-    let description: String?
-    let location: String?
-    let image: Image?
-    let isLoading: Bool
-    let shouldRetry: Bool
+    public let description: String?
+    public let location: String?
+    public let image: Image?
+    public let isLoading: Bool
+    public let shouldRetry: Bool
     
 
-    var hasLocation: Bool {
+    public var hasLocation: Bool {
         return location != nil
     }
 }

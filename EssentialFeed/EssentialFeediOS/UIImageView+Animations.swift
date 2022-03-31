@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIImageView {
+public extension UIImageView {
     func setImageAnimated(_ newImage: UIImage?) {
         image = newImage
         guard image != nil else {return}

@@ -6,16 +6,16 @@
 //
 import UIKit
 
-protocol FeedImageCellControllerDelegate {
+public protocol FeedImageCellControllerDelegate {
     func didRequestImage()
     func didCancelImageRequest()
     
 }
 
-final class FeedImageCellController: FeedImageView {
+final public class FeedImageCellController: FeedImageView {
     private let delegate: FeedImageCellControllerDelegate
     private var cell: FeedImageCell?
-    init(_ delegate: FeedImageCellControllerDelegate) {
+    public init(_ delegate: FeedImageCellControllerDelegate) {
         self.delegate = delegate
     }
     
@@ -26,7 +26,7 @@ final class FeedImageCellController: FeedImageView {
         return cell!
     }
     
-    func display(_ vm: FeedImageCellViewModel<UIImage>) {
+    public func display(_ vm: FeedImageCellViewModel<UIImage>) {
         cell?.feedImageView.image = nil
         cell?.feedImageRetryButton.isHidden = true
         cell?.locationContainer.isHidden = vm.location == nil
