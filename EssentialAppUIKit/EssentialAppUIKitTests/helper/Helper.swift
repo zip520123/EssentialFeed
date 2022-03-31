@@ -3,7 +3,7 @@ import UIKit
 import EssentialFeediOS
 import EssentialAppUIKit
 
-public extension FeedViewController {
+extension FeedViewController {
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
     }
@@ -54,9 +54,13 @@ public extension FeedViewController {
     private var feedImageSection: Int {
         0
     }
+
+    func renderedFeedImageData(at index: Int) -> Data? {
+        return simulateFeedImageViewVisiable(at: index)?.renderedImage
+    }
 }
 
-public extension FeedImageCell {
+extension FeedImageCell {
     func simulateRetryAction() {
         feedImageRetryButton.simulateTap()
     }
@@ -86,7 +90,7 @@ public extension FeedImageCell {
     }
 }
 
-public extension UIButton {
+extension UIButton {
     func simulateTap() {
 //        sendActions(for: .touchUpInside)
         allTargets.forEach({ target in
@@ -99,7 +103,7 @@ public extension UIButton {
     }
 }
 
-public extension UIRefreshControl {
+extension UIRefreshControl {
     func simulatePullToRefresh() {
         allTargets.forEach({ (target) in
             actions(forTarget: target, forControlEvent: .valueChanged)?.forEach({ (selector) in
@@ -109,7 +113,7 @@ public extension UIRefreshControl {
     }
 }
 
-public extension UIImage {
+extension UIImage {
     static func make(with color: UIColor) -> UIImage {
         let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
