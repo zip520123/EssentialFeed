@@ -33,7 +33,6 @@
 		8FF1DC5F27C448750019EA5C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8FF1DC5D27C448750019EA5C /* Main.storyboard */; };
 		8FF1DC6127C448770019EA5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FF1DC6027C448770019EA5C /* Assets.xcassets */; };
 		8FF1DC6427C448770019EA5C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8FF1DC6227C448770019EA5C /* LaunchScreen.storyboard */; };
-		8FF1DC6F27C448770019EA5C /* EssentialAppUIKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF1DC6E27C448770019EA5C /* EssentialAppUIKitTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,7 +88,6 @@
 		8FF1DC6327C448770019EA5C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8FF1DC6527C448770019EA5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8FF1DC6A27C448770019EA5C /* EssentialAppUIKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialAppUIKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8FF1DC6E27C448770019EA5C /* EssentialAppUIKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EssentialAppUIKitTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,7 +172,6 @@
 			isa = PBXGroup;
 			children = (
 				8FE6130627EE3120009ED98B /* helper */,
-				8FF1DC6E27C448770019EA5C /* EssentialAppUIKitTests.swift */,
 				8F85AA0F27F4B6AD000A94D8 /* FeedUIIntegrationTests.swift */,
 				8FCB4C7727E12DAA007347A6 /* FeedLoaderWithFallbackCompositeTests.swift */,
 				8FCB4C8327E13BA1007347A6 /* FeedImageDataLoaderWithFallbackCompositeTests.swift */,
@@ -310,7 +307,6 @@
 				8FE6130527EBCD57009ED98B /* FeedLoaderCacheDecoraterTests.swift in Sources */,
 				8F85AA1027F4B6AD000A94D8 /* FeedUIIntegrationTests.swift in Sources */,
 				8FE6130E27EF217A009ED98B /* FeedImageDataLoaderCacheDecoraterTests.swift in Sources */,
-				8FF1DC6F27C448770019EA5C /* EssentialAppUIKitTests.swift in Sources */,
 				8F85AA1C27F5C7C9000A94D8 /* FeedAcceptanceTests.swift in Sources */,
 				8F85AA1627F5C1BC000A94D8 /* FeedViewControllerTests+Localization.swift in Sources */,
 				8FCB4C8427E13BA1007347A6 /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */,
