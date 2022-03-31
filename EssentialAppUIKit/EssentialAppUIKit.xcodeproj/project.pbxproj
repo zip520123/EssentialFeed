@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8F85A74127F07727000A94D8 /* FeedImageDataLoaderCacheDecorater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F85A74027F07727000A94D8 /* FeedImageDataLoaderCacheDecorater.swift */; };
-		8F85AA0127F33559000A94D8 /* DebuggingScenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F85AA0027F33559000A94D8 /* DebuggingScenDelegate.swift */; };
 		8F85AA0427F4AD84000A94D8 /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F85AA0327F4AD83000A94D8 /* SceneDelegateTests.swift */; };
 		8F85AA0A27F4B57C000A94D8 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F85AA0927F4B57C000A94D8 /* FeedUIComposer.swift */; };
 		8F85AA0C27F4B58C000A94D8 /* MainQueueDistpatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F85AA0B27F4B58C000A94D8 /* MainQueueDistpatchDecorator.swift */; };
@@ -64,7 +63,6 @@
 
 /* Begin PBXFileReference section */
 		8F85A74027F07727000A94D8 /* FeedImageDataLoaderCacheDecorater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderCacheDecorater.swift; sourceTree = "<group>"; };
-		8F85AA0027F33559000A94D8 /* DebuggingScenDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingScenDelegate.swift; sourceTree = "<group>"; };
 		8F85AA0327F4AD83000A94D8 /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
 		8F85AA0927F4B57C000A94D8 /* FeedUIComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
 		8F85AA0B27F4B58C000A94D8 /* MainQueueDistpatchDecorator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainQueueDistpatchDecorator.swift; sourceTree = "<group>"; };
@@ -159,7 +157,6 @@
 				8F85AA0B27F4B58C000A94D8 /* MainQueueDistpatchDecorator.swift */,
 				8FF1DC5727C448750019EA5C /* AppDelegate.swift */,
 				8FF1DC5927C448750019EA5C /* SceneDelegate.swift */,
-				8F85AA0027F33559000A94D8 /* DebuggingScenDelegate.swift */,
 				8FF1DC5B27C448750019EA5C /* ViewController.swift */,
 				8FF1DC5D27C448750019EA5C /* Main.storyboard */,
 				8FF1DC6027C448770019EA5C /* Assets.xcassets */,
@@ -299,7 +296,6 @@
 				8FCB4C8227E139EB007347A6 /* FeedLoaderWithFailbackComposite.swift in Sources */,
 				8FE6130327E3C9AA009ED98B /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
 				8F85AA0A27F4B57C000A94D8 /* FeedUIComposer.swift in Sources */,
-				8F85AA0127F33559000A94D8 /* DebuggingScenDelegate.swift in Sources */,
 				8FE6130C27EF1FAA009ED98B /* FeedLoaderCacheDecorater.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

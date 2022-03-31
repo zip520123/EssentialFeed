@@ -8,16 +8,15 @@ import CoreData
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    let localStoreURL = NSPersistentContainer
-        .defaultDirectoryURL()
-        .appendingPathComponent("feed-store.sqlite")
 
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
 
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(storeURL: localStoreURL)
+        try! CoreDataFeedStore(storeURL:  NSPersistentContainer
+                                .defaultDirectoryURL()
+                                .appendingPathComponent("feed-store.sqlite"))
     }()
 
     convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
@@ -35,9 +34,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func configureWindow() {
         let url = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
 
-        let remoteClient = makeRemoteClient()
-        let remoteFeedLoader = RemoteFeedLoader(url: url, client: remoteClient)
-        let remoteImageLoader = RemoteImageDataLoader(client: remoteClient)
+        let remoteFeedLoader = RemoteFeedLoader(url: url, client: httpClient)
+        let remoteImageLoader = RemoteImageDataLoader(client: httpClient)
 
         let localFeedLoader = LocalFeedLoader(store: store, currentDate: Date.init)
         let localImageLoader = LocalFeedImageDataLoader(store: store)
@@ -56,10 +54,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
 
     }
-
-    func makeRemoteClient() -> HTTPClient {
-        httpClient
-    }
-
 }
 
