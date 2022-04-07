@@ -8,14 +8,15 @@
 import UIKit
 import EssentialFeed
 import EssentialFeediOS
+import Combine
 
 public final class FeedUIComposer {
     private init() {}
     
-    public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
-        
-        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader))
-        
+    public static func feedComposedWith(feedLoader: @escaping () -> FeedLoader.Publisher, imageLoader: FeedImageDataLoader) -> FeedViewController {
+
+        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: { feedLoader().dispatchOnMainQueue() })
+
         let controller = FeedViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
         
         presentationAdapter.presenter = FeedPresenter(
@@ -65,8 +66,6 @@ private final class FeedViewAdapter: FeedView {
         })
         
     }
-    
-    
 }
 
 private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, Image>: FeedImageCellControllerDelegate where View.Image == Image {
@@ -101,12 +100,13 @@ private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, 
     }
 }
 
-private final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
+final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
 
-    var feedLoader: FeedLoader
+    var feedLoader: () -> FeedLoader.Publisher
     var presenter: FeedPresenter?
-    
-    init(feedLoader: FeedLoader) {
+    private var cancellable: Cancellable?
+
+    init(feedLoader: @escaping ()->FeedLoader.Publisher) {
         self.feedLoader = feedLoader
     }
     
@@ -116,15 +116,20 @@ private final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
     
     func loadFeed() {
         presenter?.didStartLoadingFeed()
-        
-        feedLoader.load { [weak self] result in
-            switch result {
-            case let .success(feeds):
-                self?.presenter?.didFinishLoadingFeed(with: feeds)
-            case let .failure(error):
-                self?.presenter?.didFinishLoadingFeed(with: error)
-            }
-        }
+
+        cancellable = feedLoader().sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case let .failure(error):
+                    self?.presenter?.didFinishLoadingFeed(with: error)
+
+                }
+            }, receiveValue: { [weak self] feed in
+                self?.presenter?.didFinishLoadingFeed(with: feed)
+            })
+
     }
 }
 
@@ -150,5 +155,49 @@ extension WeakRefVirturalProxy: FeedImageView where T: FeedImageView, T.Image ==
 extension WeakRefVirturalProxy: FeedErrorView where T: FeedErrorView {
     func display(_ viewModel: FeedErrorViewModel) {
         object?.display(viewModel)
+    }
+}
+
+extension Publisher {
+    func dispatchOnMainQueue() -> AnyPublisher<Output, Failure> {
+        receive(on: DispatchQueue.immediateWhenOnMainQueueScheduler).eraseToAnyPublisher()
+    }
+}
+
+extension DispatchQueue {
+
+    static var immediateWhenOnMainQueueScheduler: ImmediateWhenOnMainQueueScheduler {
+        return ImmediateWhenOnMainQueueScheduler()
+    }
+
+    struct ImmediateWhenOnMainQueueScheduler: Scheduler {
+        typealias SchedulerTimeType = DispatchQueue.SchedulerTimeType
+        typealias SchedulerOptions = DispatchQueue.SchedulerOptions
+
+        var now: DispatchQueue.SchedulerTimeType {
+            DispatchQueue.main.now
+        }
+
+        var minimumTolerance: SchedulerTimeType.Stride {
+            DispatchQueue.main.minimumTolerance
+        }
+
+        func schedule(options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
+            guard Thread.isMainThread else {
+                DispatchQueue.main.schedule(options: options, action)
+                return
+            }
+            action()
+        }
+
+        func schedule(after date: DispatchQueue.SchedulerTimeType, interval: DispatchQueue.SchedulerTimeType.Stride, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) -> Cancellable {
+            DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
+        }
+
+        func schedule(after date: DispatchQueue.SchedulerTimeType, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
+            DispatchQueue.main.schedule(after: date, tolerance: tolerance, options: options, action)
+        }
+
+
     }
 }
