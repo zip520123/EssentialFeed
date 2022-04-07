@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F1B968C27FF9059000A2F41 /* CombineHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1B968B27FF9059000A2F41 /* CombineHelpers.swift */; };
 		8F85AA0427F4AD84000A94D8 /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F85AA0327F4AD83000A94D8 /* SceneDelegateTests.swift */; };
 		8F85AA0A27F4B57C000A94D8 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F85AA0927F4B57C000A94D8 /* FeedUIComposer.swift */; };
 		8F85AA0E27F4B685000A94D8 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F85AA0D27F4B684000A94D8 /* Helper.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8F1B968B27FF9059000A2F41 /* CombineHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineHelpers.swift; sourceTree = "<group>"; };
 		8F85AA0327F4AD83000A94D8 /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
 		8F85AA0927F4B57C000A94D8 /* FeedUIComposer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
 		8F85AA0D27F4B684000A94D8 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				8FF1DC6027C448770019EA5C /* Assets.xcassets */,
 				8FF1DC6227C448770019EA5C /* LaunchScreen.storyboard */,
 				8FF1DC6527C448770019EA5C /* Info.plist */,
+				8F1B968B27FF9059000A2F41 /* CombineHelpers.swift */,
 			);
 			path = EssentialAppUIKit;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				8FF1DC5C27C448750019EA5C /* ViewController.swift in Sources */,
 				8FF1DC5827C448750019EA5C /* AppDelegate.swift in Sources */,
 				8FF1DC5A27C448750019EA5C /* SceneDelegate.swift in Sources */,
+				8F1B968C27FF9059000A2F41 /* CombineHelpers.swift in Sources */,
 				8F85AA0A27F4B57C000A94D8 /* FeedUIComposer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
