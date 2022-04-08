@@ -1,14 +1,14 @@
 import EssentialFeed
 import XCTest
 
-class LoaderStub: FeedLoader {
-    private let result: FeedLoader.Result
+class LoaderStub {
+    private let result: Swift.Result<[FeedImage], Error>
 
-    init(result: FeedLoader.Result) {
+    init(result: Swift.Result<[FeedImage], Error>) {
         self.result = result
     }
 
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
+    func load(completion: @escaping (Swift.Result<[FeedImage], Error>) -> Void) {
         completion(result)
     }
 }
@@ -22,28 +22,6 @@ extension XCTestCase {
 
     func uniqueFeed() -> [FeedImage] {
         [FeedImage(id: UUID(), description: nil, location: nil, url: URL(string: "https://any-url.com")!)]
-    }
-}
-
-protocol FeedLoaderTestCase: XCTestCase {}
-
-extension FeedLoaderTestCase {
-    func expect(_ sut: FeedLoader, toCompleteWith expectedResult: FeedLoader.Result) {
-        let exp = expectation(description: "Wait for load completion")
-
-        sut.load { result in
-            switch (result, expectedResult) {
-            case let (.success(receivedFeed), .success(expectedFeed)):
-
-                XCTAssertEqual(receivedFeed, expectedFeed)
-            case (.failure, .failure):
-                break
-            default:
-                XCTFail("Expected successful load, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1)
     }
 }
 

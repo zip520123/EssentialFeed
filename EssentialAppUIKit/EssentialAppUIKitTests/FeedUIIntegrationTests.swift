@@ -10,6 +10,7 @@ import UIKit
 import EssentialFeed
 import EssentialFeediOS
 import EssentialAppUIKit
+import Combine
 
 final class FeedUIIntegrationTests: XCTestCase {
     
@@ -390,24 +391,25 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(view?.descriptionText, image.description, "Expected description text \(String(describing: image.description)), got \(String(describing: view?.descriptionText)) instead at index: \(index)" ,file: file, line: line)
     }
     
-    class LoaderSpy: FeedLoader, FeedImageDataLoader {
+    class LoaderSpy: FeedImageDataLoader {
         
         var loadFeedCallCount: Int { feedRequests.count }
-        private(set) var feedRequests = [(FeedLoader.Result)->Void]()
-        
-        // MARK: FeedLoader
-        
-        func load(completion: @escaping (FeedLoader.Result) -> Void) {
-            feedRequests.append(completion)
+        private(set) var feedRequests = [PassthroughSubject<[FeedImage], Swift.Error>]()
+
+        func loadPublisher() -> AnyPublisher<[FeedImage], Swift.Error> {
+
+            let publisher = PassthroughSubject<[FeedImage], Swift.Error>()
+            feedRequests.append(publisher)
+            return publisher.eraseToAnyPublisher()
         }
-        
+
         func completeFeedLoading(with feed: [FeedImage] = [], at index: Int) {
-            feedRequests[index](.success(feed))
+            feedRequests[index].send(feed)
         }
         
         func completeFeedLoadingWithError(at index: Int = 0) {
             let error = NSError(domain: "Any Error", code: 0, userInfo: nil)
-            feedRequests[index](.failure(error))
+            feedRequests[index].send(completion: .failure(error))
         }
         
         // MARK: FeedImageDataLoader
