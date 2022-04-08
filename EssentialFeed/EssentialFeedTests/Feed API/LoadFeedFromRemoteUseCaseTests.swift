@@ -9,43 +9,6 @@ import XCTest
 import EssentialFeed
 
 class LoadFeedFromRemoteUseCaseTests: XCTestCase {
-
-    func test_init() {
-        
-        let (_,client) = makeSUT()
-         
-        XCTAssertEqual(client.requests, [])
-    }
-    
-    func test_load_requestDateFromURL() {
-        let url = URL(string: "https://a-given-url.com")!
-        
-        let (sut, client) = makeSUT(url: url)
-        
-        sut.load {_ in}
-        
-        XCTAssertEqual(client.requests, [url])
-    }
-    
-    func test_loadTwice_requestDateFromURLTwice() {
-        let url = URL(string: "https://a-given-url.com")!
-        
-        let (sut, client) = makeSUT(url: url)
-        
-        sut.load{_ in}
-        sut.load{_ in}
-        
-        XCTAssertEqual(client.requests, [url, url])
-    }
-    
-    func test_load_deliversErrorOnClientError() {
-        let (sut, client) = makeSUT()
-        let clientError = NSError(domain: "test", code: 0)
-        expect(sut, toCompleteWithResult: failure(.connectivity)) {
-            client.complete(with: clientError)
-        }
-
-    }
     
     func test_load_deliversErrorOnNon200HTTPResponse() {
         let (sut, client) = makeSUT()
@@ -96,17 +59,6 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
             let json = makeItemsJSON([item1.json, item2.json])
             client.complete(status: 200, data: json)
         })
-    }
-    
-    func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-        let url = URL(string: "http://a-url.com")!
-        let client = HTTPClientSpy()
-        var sut: RemoteFeedLoader? = RemoteFeedLoader(url: url, client: client)
-        var captureResults = [RemoteFeedLoader.Result]()
-        sut?.load(completion: {captureResults.append($0)})
-        sut = nil
-        client.complete(status: 200, data: makeItemsJSON([]))
-        XCTAssertTrue(captureResults.isEmpty)
     }
     
     //MARK: - Helpers
