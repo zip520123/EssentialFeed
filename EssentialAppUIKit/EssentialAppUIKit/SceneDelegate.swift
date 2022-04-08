@@ -52,10 +52,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[FeedImage], Error> {
         let url = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
 
-        let remoteFeedLoader = RemoteLoader(url: url, client: httpClient, mapper: FeedItemMapper.map)
-
-        return remoteFeedLoader
-            .loadPublisher()
+        return httpClient
+            .getPublisher(from: url)
+            .tryMap(FeedItemMapper.map)
             .caching(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
     }
@@ -75,4 +74,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
-extension RemoteLoader: FeedLoader where Resource == [FeedImage] {}
+//extension RemoteLoader: FeedLoader where Resource == [FeedImage] {}
