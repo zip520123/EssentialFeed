@@ -319,6 +319,24 @@
 			path = "Share API infra";
 			sourceTree = "<group>";
 		};
+		8F2AD09C2800B2D9002D39F2 /* ImageComments API */ = {
+			isa = PBXGroup;
+			children = (
+				8F1B968F27FF9D83000A2F41 /* RemoteImageCommentsLoader.swift */,
+				8F1B969127FF9E00000A2F41 /* RemoteImageCommentsMapper.swift */,
+				8F2AD0962800AB16002D39F2 /* ImageComment.swift */,
+			);
+			path = "ImageComments API";
+			sourceTree = "<group>";
+		};
+		8F2AD09D2800B31A002D39F2 /* Image Comment API */ = {
+			isa = PBXGroup;
+			children = (
+				8F1B968D27FF9BE9000A2F41 /* LoadImageCommentsFromRemoteUseCaseTests.swift */,
+			);
+			path = "Image Comment API";
+			sourceTree = "<group>";
+		};
 		8F47456527B6F1D0008C41EB /* Feed Presentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -409,6 +427,7 @@
 				8F47456527B6F1D0008C41EB /* Feed Presentation */,
 				E7846EF326EF917000C96A98 /* Feed Cahce */,
 				E72D05A126CD368F002146D9 /* Feed API */,
+				8F2AD09C2800B2D9002D39F2 /* ImageComments API */,
 				E71D3D1C26C577C900189843 /* EssentialFeed.h */,
 				E71D3D1D26C577C900189843 /* Info.plist */,
 				E71D3D3526C577EB00189843 /* FeedItem.swift */,
@@ -416,7 +435,6 @@
 				E756325427418BB2002B7D0B /* FeedImageDataLoader.swift */,
 				8FE6130927EF1E6E009ED98B /* FeedCache.swift */,
 				8F85A73E27F07697000A94D8 /* FeedImageCache.swift */,
-				8F2AD0962800AB16002D39F2 /* ImageComment.swift */,
 			);
 			path = EssentialFeed;
 			sourceTree = "<group>";
@@ -431,6 +449,7 @@
 				E7750BC126DE34DC00A4184A /* Helpers */,
 				E7FB79C726D5A61B00213A2A /* Feed API */,
 				E716274526ECE6670051B61F /* Feed Cache */,
+				8F2AD09D2800B31A002D39F2 /* Image Comment API */,
 			);
 			path = EssentialFeedTests;
 			sourceTree = "<group>";
@@ -439,8 +458,6 @@
 			isa = PBXGroup;
 			children = (
 				E72D05A226CD36B0002146D9 /* RemoteFeedLoader.swift */,
-				8F1B968F27FF9D83000A2F41 /* RemoteImageCommentsLoader.swift */,
-				8F1B969127FF9E00000A2F41 /* RemoteImageCommentsMapper.swift */,
 				E7FB79C326D59CF700213A2A /* FeedItemsMapper.swift */,
 				E737D9F226F104ED00F5DA09 /* RemoteFeedItem.swift */,
 				8F4C805D27CCE1590077C445 /* RemoteImageDataLoader.swift */,
@@ -542,7 +559,6 @@
 			children = (
 				E7F28B8226CA6F570076A9DF /* LoadFeedFromRemoteUseCaseTests.swift */,
 				8FF1DC8727C452ED0019EA5C /* LoadFeedImageDataFromRemoteUseCaseTests.swift */,
-				8F1B968D27FF9BE9000A2F41 /* LoadImageCommentsFromRemoteUseCaseTests.swift */,
 			);
 			path = "Feed API";
 			sourceTree = "<group>";
