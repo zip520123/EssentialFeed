@@ -25,7 +25,7 @@ public class LoadResourcePresenter<Resource, View: ResourceView> {
     }
     public func didFinishLoading(with error: Error) {
         loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: false))
-        feedErrorView.display(ResourceErrorViewModel(errorMessage: FeedPresenter.feedLoadError))
+        feedErrorView.display(ResourceErrorViewModel(errorMessage: Self.feedLoadError))
     }
 
 
