@@ -56,9 +56,26 @@ class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
             isLoading: false,
             shouldRetry: true))
     }
+
+    public static func map(_ image: FeedImage) -> FeedImageCellViewModel<Image> {
+        FeedImageCellViewModel(
+            description: image.description,
+            location: image.location,
+            image: nil,
+            isLoading: false,
+            shouldRetry: false)
+    }
 }
 
 class FeedImagePresenterTests: XCTestCase {
+
+    func test_map_createsViewModel() {
+        let image = uniqueImage()
+        let viewModel = FeedImagePresenter<ViewSpy, AnyImage>.map(image)
+        XCTAssertEqual(viewModel.description, image.description)
+        XCTAssertEqual(viewModel.location, image.location)
+    }
+
     func test_init_doesNotSendMsg() {
         let (view, _) = makeSUT()
         XCTAssertTrue(view.displayEvent.isEmpty)
