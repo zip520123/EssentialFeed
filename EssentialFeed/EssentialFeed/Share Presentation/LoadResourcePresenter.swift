@@ -1,14 +1,15 @@
 public protocol ResourceView {
-    func display(_ viewModel: String)
+    associatedtype ResourceViewModel
+    func display(_ viewModel: ResourceViewModel)
 }
-public class LoadResourcePresenter {
-    public typealias Mapper = (String)->String
+public class LoadResourcePresenter<Resource, View: ResourceView> {
+    public typealias Mapper = (Resource) -> View.ResourceViewModel
     let feedErrorView: FeedErrorView
     let loadingView: FeedLoadingView
-    let resourceView: ResourceView
+    let resourceView: View
     let mapper: Mapper
 
-    public init(feedErrorView: FeedErrorView, loadingView: FeedLoadingView, resourceView: ResourceView, mapper: @escaping Mapper) {
+    public init(feedErrorView: FeedErrorView, loadingView: FeedLoadingView, resourceView: View, mapper: @escaping Mapper) {
         self.feedErrorView = feedErrorView
         self.loadingView = loadingView
         self.resourceView = resourceView
@@ -18,7 +19,7 @@ public class LoadResourcePresenter {
         feedErrorView.display(FeedErrorViewModel(errorMessage: nil))
         loadingView.display(viewModel: FeedLoadingViewModel(isLoading: true))
     }
-    public func didFinishLoading(with resource: String) {
+    public func didFinishLoading(with resource: Resource) {
         resourceView.display(mapper(resource))
         loadingView.display(viewModel: FeedLoadingViewModel(isLoading: false))
     }
