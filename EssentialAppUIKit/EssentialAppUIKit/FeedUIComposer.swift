@@ -118,7 +118,7 @@ private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, 
 
 final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
     private var loader: () -> AnyPublisher<Resource, Swift.Error>
-    var presenter: LoadResourcePresenter<Resource, FeedViewAdapter>?
+    var presenter: LoadResourcePresenter<Resource, View>?
     private var cancellable: Cancellable?
 
     init(loader: @escaping ()->AnyPublisher<Resource, Swift.Error>) {
