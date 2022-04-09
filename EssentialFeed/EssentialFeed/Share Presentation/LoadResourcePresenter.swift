@@ -31,9 +31,9 @@ public class LoadResourcePresenter<Resource, View: ResourceView> {
 
     static var feedLoadError: String {
         NSLocalizedString("GENERIC_CONNECTION_ERROR",
-                          tableName: "Feed",
-                          bundle: Bundle(for: FeedPresenter.self),
-                          comment: "Title for the feed view")
+                          tableName: "Shared",
+                          bundle: Bundle(for: Self.self),
+                          comment: "Error message displayed when we can't load the resource from the server")
 
     }
 
