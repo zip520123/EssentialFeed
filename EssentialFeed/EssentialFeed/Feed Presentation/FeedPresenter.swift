@@ -1,12 +1,7 @@
 //
 
 import Foundation
-public protocol FeedLoadingView {
-    func display(viewModel: FeedLoadingViewModel)
-}
-public struct FeedLoadingViewModel {
-    public let isLoading: Bool
-}
+
 
 public protocol FeedErrorView {
     func display(_ viewModel: FeedErrorViewModel)
@@ -26,24 +21,24 @@ extension FeedErrorViewModel: Equatable {
 
 public final class FeedPresenter {
     let feedErrorView: FeedErrorView
-    let loadingView: FeedLoadingView
+    let loadingView: ResourceLoadingView
     let feedView: FeedView
 
-    public init(feedErrorView: FeedErrorView, loadingView: FeedLoadingView, feedView: FeedView) {
+    public init(feedErrorView: FeedErrorView, loadingView: ResourceLoadingView, feedView: FeedView) {
         self.feedErrorView = feedErrorView
         self.loadingView = loadingView
         self.feedView = feedView
     }
     public func didStartLoadingFeed() {
         feedErrorView.display(FeedErrorViewModel(errorMessage: nil))
-        loadingView.display(viewModel: FeedLoadingViewModel(isLoading: true))
+        loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: true))
     }
     public func didFinishLoadingFeed(with feed: [FeedImage]) {
         feedView.display(viewModel: FeedViewModel(feeds: feed))
-        loadingView.display(viewModel: FeedLoadingViewModel(isLoading: false))
+        loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: false))
     }
     public func didFinishLoadingFeed(with error: Error) {
-        loadingView.display(viewModel: FeedLoadingViewModel(isLoading: false))
+        loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: false))
         feedErrorView.display(FeedErrorViewModel(errorMessage: FeedPresenter.feedLoadError))
     }
 

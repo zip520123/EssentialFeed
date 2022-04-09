@@ -16,6 +16,7 @@
 		8F2AD0AB2801B49D002D39F2 /* SharedLocalizationStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2AD0AA2801B49D002D39F2 /* SharedLocalizationStringTests.swift */; };
 		8F2AD0AC2801B582002D39F2 /* Shared.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F2AD0AE2801B582002D39F2 /* Shared.strings */; };
 		8F2AD0B22801B83F002D39F2 /* SharedLocalizationTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2AD0B12801B83F002D39F2 /* SharedLocalizationTestHelper.swift */; };
+		8F2AD0B42801BD6E002D39F2 /* ResourceLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2AD0B32801BD6D002D39F2 /* ResourceLoadingView.swift */; };
 		8F47456727B6F1EB008C41EB /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F47456627B6F1EB008C41EB /* FeedPresenter.swift */; };
 		8F47456827B6F373008C41EB /* Feed.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F47456027B6EDEC008C41EB /* Feed.strings */; };
 		8F47456B27B6F5E7008C41EB /* FeedLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E742CAE22775A09D0084E091 /* FeedLocalizationTests.swift */; };
@@ -154,6 +155,7 @@
 		8F2AD0AF2801B586002D39F2 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Shared.strings; sourceTree = "<group>"; };
 		8F2AD0B02801B588002D39F2 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Shared.strings"; sourceTree = "<group>"; };
 		8F2AD0B12801B83F002D39F2 /* SharedLocalizationTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLocalizationTestHelper.swift; sourceTree = "<group>"; };
+		8F2AD0B32801BD6D002D39F2 /* ResourceLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoadingView.swift; sourceTree = "<group>"; };
 		8F47455F27B6EDEC008C41EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Feed.strings; sourceTree = "<group>"; };
 		8F47456127B6EDEE008C41EB /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
 		8F47456227B6EDEF008C41EB /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 		8F2AD0A52801A821002D39F2 /* Share Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				8F2AD0B32801BD6D002D39F2 /* ResourceLoadingView.swift */,
 				8F2AD0A62801A833002D39F2 /* LoadResourcePresenter.swift */,
 				8F2AD0AE2801B582002D39F2 /* Shared.strings */,
 			);
@@ -856,6 +859,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FE7DCB027D96B61002EDC6C /* CoreDataFeedStore+FeedStore.swift in Sources */,
+				8F2AD0B42801BD6E002D39F2 /* ResourceLoadingView.swift in Sources */,
 				E7FB79C426D59CF700213A2A /* FeedItemsMapper.swift in Sources */,
 				8F1B969227FF9E00000A2F41 /* RemoteImageCommentsMapper.swift in Sources */,
 				E752B93326F4AC3E002350FE /* FeedCachePolicy.swift in Sources */,
