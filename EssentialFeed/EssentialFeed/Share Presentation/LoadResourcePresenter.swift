@@ -9,7 +9,7 @@ public class LoadResourcePresenter {
         self.loadingView = loadingView
         self.feedView = feedView
     }
-    public func didStartLoadingFeed() {
+    public func didStartLoading() {
         feedErrorView.display(FeedErrorViewModel(errorMessage: nil))
         loadingView.display(viewModel: FeedLoadingViewModel(isLoading: true))
     }
