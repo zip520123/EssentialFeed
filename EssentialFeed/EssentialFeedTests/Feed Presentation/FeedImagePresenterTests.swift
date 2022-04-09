@@ -1,72 +1,6 @@
 import XCTest
 import EssentialFeed
 
-struct FeedImageCellViewModel<Image> {
-
-    let description: String?
-    let location: String?
-    let image: Image?
-    let isLoading: Bool
-    let shouldRetry: Bool
-
-
-    var hasLocation: Bool {
-        return location != nil
-    }
-}
-
-protocol FeedImageView {
-    associatedtype Image
-    func display(_ model: FeedImageCellViewModel<Image>)
-}
-
-class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
-    private let view: View
-    private let imageTransformer: (Data) -> Image?
-
-    init(_ view: View, imageTransformer: @escaping (Data) -> Image?) {
-        self.view = view
-        self.imageTransformer = imageTransformer
-    }
-
-    func didStartLoadingImageData(for model: FeedImage) {
-        view.display(FeedImageCellViewModel(
-            description: model.description,
-            location: model.location,
-            image: nil,
-            isLoading: true,
-            shouldRetry: false))
-    }
-
-    func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
-        let image = imageTransformer(data)
-        view.display(FeedImageCellViewModel(
-            description: model.description,
-            location: model.location,
-            image: image,
-            isLoading: false,
-            shouldRetry: image == nil))
-    }
-
-    func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
-        view.display(FeedImageCellViewModel(
-            description: model.description,
-            location: model.location,
-            image: nil,
-            isLoading: false,
-            shouldRetry: true))
-    }
-
-    public static func map(_ image: FeedImage) -> FeedImageCellViewModel<Image> {
-        FeedImageCellViewModel(
-            description: image.description,
-            location: image.location,
-            image: nil,
-            isLoading: false,
-            shouldRetry: false)
-    }
-}
-
 class FeedImagePresenterTests: XCTestCase {
 
     func test_map_createsViewModel() {
@@ -152,7 +86,7 @@ class FeedImagePresenterTests: XCTestCase {
 
     private func makeSUT(tf: @escaping (Data)-> AnyImage? = {_ in nil}, file: StaticString = #file, line: UInt = #line) -> (ViewSpy, FeedImagePresenter<ViewSpy, AnyImage>) {
         let view = ViewSpy()
-        let sut = FeedImagePresenter(view, imageTransformer: tf)
+        let sut = FeedImagePresenter(view: view, imageTransformer: tf)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (view, sut)

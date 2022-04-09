@@ -3,29 +3,34 @@ public protocol ResourceView {
     func display(_ viewModel: ResourceViewModel)
 }
 public class LoadResourcePresenter<Resource, View: ResourceView> {
-    public typealias Mapper = (Resource) -> View.ResourceViewModel
-    let feedErrorView: ResourceErrorView
+    public typealias Mapper = (Resource) throws -> View.ResourceViewModel
+    let resourceErrorView: ResourceErrorView
     let loadingView: ResourceLoadingView
     let resourceView: View
     let mapper: Mapper
 
-    public init(feedErrorView: ResourceErrorView, loadingView: ResourceLoadingView, resourceView: View, mapper: @escaping Mapper) {
-        self.feedErrorView = feedErrorView
+    public init(resourceErrorView: ResourceErrorView, loadingView: ResourceLoadingView, resourceView: View, mapper: @escaping Mapper) {
+        self.resourceErrorView = resourceErrorView
         self.loadingView = loadingView
         self.resourceView = resourceView
         self.mapper = mapper
     }
     public func didStartLoading() {
-        feedErrorView.display(ResourceErrorViewModel(errorMessage: nil))
+        resourceErrorView.display(ResourceErrorViewModel(errorMessage: nil))
         loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: true))
     }
     public func didFinishLoading(with resource: Resource) {
-        resourceView.display(mapper(resource))
-        loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: false))
+        do {
+            resourceView.display(try mapper(resource))
+            loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: false))
+
+        } catch {
+            didFinishLoading(with: error)
+        }
     }
     public func didFinishLoading(with error: Error) {
         loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: false))
-        feedErrorView.display(ResourceErrorViewModel(errorMessage: Self.feedLoadError))
+        resourceErrorView.display(ResourceErrorViewModel(errorMessage: Self.feedLoadError))
     }
 
 

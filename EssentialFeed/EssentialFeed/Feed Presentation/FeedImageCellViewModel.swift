@@ -1,10 +1,3 @@
-//
-//  FeedImageCellViewModel.swift
-//  EssentialFeediOS
-//
-//  Created by zip520123 on 03/12/2021.
-//
-import EssentialFeed
 
 public struct FeedImageCellViewModel<Image> {
     

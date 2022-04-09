@@ -1,6 +1,5 @@
 
 import Foundation
-import EssentialFeed
 
 public protocol FeedImageView {
     associatedtype Image
@@ -48,5 +47,14 @@ public final class FeedImagePresenter<View: FeedImageView, Image> where View.Ima
                         image: nil,
                         isLoading: false,
                         shouldRetry: true))
+    }
+
+    public static func map(_ image: FeedImage) -> FeedImageCellViewModel<Image> {
+        FeedImageCellViewModel(
+            description: image.description,
+            location: image.location,
+            image: nil,
+            isLoading: false,
+            shouldRetry: false)
     }
 }
