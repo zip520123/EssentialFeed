@@ -13,7 +13,8 @@ class FeedPresenterTests: XCTestCase {
         XCTAssertEqual(viewModel.feeds, feed)
     }
 
-    func localized(_ key: String, table: String = "Feed", _ file: StaticString = #file, _ line: UInt = #line) -> String {
+    func localized(_ key: String, _ file: StaticString = #file, _ line: UInt = #line) -> String {
+        let table = "Feed"
         let bundle = Bundle(for: FeedPresenter.self)
         let value = bundle.localizedString(forKey: key, value: nil, table: table)
         if value == key {
