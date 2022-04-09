@@ -18,23 +18,23 @@ class ImageCommentsPresenterTests: XCTestCase {
             ImageComment(
                 id: UUID(),
                 message: "a message",
-                createAt: now.adding(seconds: -5),
+                createAt: now.adding(days: -5, calander: calender),
                 username: "a username"),
             ImageComment(
                 id: UUID(),
                 message: "another message",
-                createAt: now.adding(seconds: -1),
+                createAt: now.adding(days: -1, calander: calender),
                 username: "another username")
         ]
 
         let viewModel = ImageCommentsPresenter.map(comments, now, calender, locale)
         XCTAssertEqual(viewModel.comments, [ImageCommentViewModel(
                 message: "a message",
-                date: "5 seconds ago",
+                date: "5 days ago",
                 username: "a username"
             ),ImageCommentViewModel(
                 message: "another message",
-                date: "1 second ago",
+                date: "1 day ago",
                 username: "another username"
             )]
         )

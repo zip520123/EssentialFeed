@@ -30,8 +30,8 @@ func makeItemsJSON(_ items: [[String: Any]]) -> Data {
 
 }
 extension Date {
-    func adding(days: Int) -> Date {
-        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    func adding(days: Int, calander: Calendar = Calendar(identifier: .gregorian)) -> Date {
+        return calander.date(byAdding: .day, value: days, to: self)!
     }
 
     func adding(seconds: TimeInterval) -> Date {
