@@ -20,7 +20,7 @@ public final class FeedUIComposer {
         let controller = FeedViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
         
         presentationAdapter.presenter = LoadResourcePresenter(
-            feedErrorView: WeakRefVirturalProxy(controller),
+            resourceErrorView: WeakRefVirturalProxy(controller),
             loadingView: WeakRefVirturalProxy(controller),
             resourceView: FeedViewAdapter(controller: controller, imageLoader: { imageLoader($0).dispatchOnMainQueue() } ),
             mapper: FeedPresenter.map
@@ -55,19 +55,31 @@ final class FeedViewAdapter: ResourceView {
     
     func display(_ viewModel: FeedViewModel) {
         controller?.display(viewModel.feeds.map { feed in
-            let adapter = FeedImageDataLoaderPresentationAdapter<WeakRefVirturalProxy<FeedImageCellController>, UIImage>(model: feed, imageLoader: imageLoader)
-            let view = FeedImageCellController(adapter)
+            let adapter = LoadResourcePresentationAdapter<Data, WeakRefVirturalProxy<FeedImageCellController>>(loader: { [imageLoader] in
+                imageLoader(feed.imageURL).map {$0!}.eraseToAnyPublisher()
+            })
+
+            let view = FeedImageCellController(
+                viewModel: FeedImagePresenter<FeedImageCellController, UIImage>.map(feed),
+                delegate: adapter)
             
-            adapter.presenter = FeedImagePresenter(
-                view: WeakRefVirturalProxy(view),
-                imageTransformer: UIImage.init)
-            
+            adapter.presenter = LoadResourcePresenter(
+                resourceErrorView: WeakRefVirturalProxy(view),
+                loadingView: WeakRefVirturalProxy(view),
+                resourceView: WeakRefVirturalProxy(view),
+                mapper: { data in
+                    guard let image = UIImage(data: data) else { throw InvalidImageData()}
+                    return image
+                })
+
             return view
             
         })
         
     }
 }
+
+private struct InvalidImageData: Error {}
 
 private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, Image>: FeedImageCellControllerDelegate where View.Image == Image {
     private let model: FeedImage
@@ -105,17 +117,14 @@ private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, 
 }
 
 final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
-
     private var loader: () -> AnyPublisher<Resource, Swift.Error>
     var presenter: LoadResourcePresenter<Resource, FeedViewAdapter>?
-
     private var cancellable: Cancellable?
 
     init(loader: @escaping ()->AnyPublisher<Resource, Swift.Error>) {
         self.loader = loader
     }
 
-    
     func loadResource() {
         presenter?.didStartLoading()
 
@@ -141,6 +150,16 @@ extension LoadResourcePresentationAdapter: FeedViewControllerDelegate {
     }
 }
 
+extension LoadResourcePresentationAdapter: FeedImageCellControllerDelegate {
+    func didRequestImage() {
+        loadResource()
+    }
+
+    func didCancelImageRequest() {
+        cancellable?.cancel()
+    }
+}
+
 private final class WeakRefVirturalProxy<T: AnyObject> {
     private weak var object: T?
     init(_ object: T) {
@@ -154,8 +173,8 @@ extension WeakRefVirturalProxy: ResourceLoadingView where T: ResourceLoadingView
     }
 }
 
-extension WeakRefVirturalProxy: FeedImageView where T: FeedImageView, T.Image == UIImage {
-    func display(_ model: FeedImageCellViewModel<UIImage>) {
+extension WeakRefVirturalProxy: ResourceView where T: ResourceView, T.ResourceViewModel == UIImage {
+    func display(_ model: UIImage) {
         object?.display(model)
     }
 }

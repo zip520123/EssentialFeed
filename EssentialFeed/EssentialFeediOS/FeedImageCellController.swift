@@ -5,6 +5,7 @@
 //  Created by zip520123 on 15/11/2021.
 //
 import UIKit
+import EssentialFeed
 
 public protocol FeedImageCellControllerDelegate {
     func didRequestImage()
@@ -12,35 +13,43 @@ public protocol FeedImageCellControllerDelegate {
     
 }
 
-final public class FeedImageCellController: FeedImageView {
+final public class FeedImageCellController: FeedImageView, ResourceView, ResourceLoadingView, ResourceErrorView {
+    public typealias ResourceViewModel = UIImage
     private let delegate: FeedImageCellControllerDelegate
     private var cell: FeedImageCell?
-    public init(_ delegate: FeedImageCellControllerDelegate) {
+    private let vm: FeedImageCellViewModel<UIImage>
+    public init(viewModel: FeedImageCellViewModel<UIImage>, delegate: FeedImageCellControllerDelegate) {
         self.delegate = delegate
+        self.vm = viewModel
     }
     
     func view(in tableView: UITableView) -> UITableViewCell {
         cell = tableView.dequeueCell()
-        
-        delegate.didRequestImage()
-        return cell!
-    }
-    
-    public func display(_ vm: FeedImageCellViewModel<UIImage>) {
-        cell?.feedImageView.image = nil
-        cell?.feedImageRetryButton.isHidden = true
         cell?.locationContainer.isHidden = vm.location == nil
         cell?.locationLabel.text = vm.location
         cell?.descripitonLabel.text = vm.description
         cell?.onRetry = delegate.didRequestImage
-        cell?.feedImageView.setImageAnimated(vm.image)
-        
-        vm.isLoading ? cell?.feedimageContainer.startShimmering() : cell?.feedimageContainer.stopShimmering()
-        
-        cell?.feedImageRetryButton.isHidden = !vm.shouldRetry
-        
+        delegate.didRequestImage()
+
+        return cell!
     }
     
+    public func display(_ vm: FeedImageCellViewModel<UIImage>) {
+    }
+
+    public func display(_ viewModel: UIImage) {
+        cell?.feedImageView.setImageAnimated(viewModel)
+    }
+
+    public func display(_ viewModel: ResourceErrorViewModel) {
+        cell?.feedImageRetryButton.isHidden = viewModel.errorMessage == nil
+    }
+
+    public func display(viewModel: ResourceLoadingViewModel) {
+        viewModel.isLoading ? cell?.feedimageContainer.startShimmering() : cell?.feedimageContainer.stopShimmering()
+    }
+
+
     func preload() {
         delegate.didRequestImage()
     }
