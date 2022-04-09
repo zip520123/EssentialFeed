@@ -42,7 +42,7 @@ class FeedPresenterTests: XCTestCase {
         sut.didFinishLoadingFeed(with: error)
 
         XCTAssertEqual(view.msg, [
-            .error(msg: localized("FEED_VIEW_CONNECTION_ERROR") ),
+            .error(msg: localized("GENERIC_CONNECTION_ERROR") ),
             .loading(isLoading: false)
         ])
     }

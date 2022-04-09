@@ -23,14 +23,14 @@ public class LoadResourcePresenter<Resource, View: ResourceView> {
         resourceView.display(mapper(resource))
         loadingView.display(viewModel: FeedLoadingViewModel(isLoading: false))
     }
-    public func didFinishLoadingFeed(with error: Error) {
+    public func didFinishLoading(with error: Error) {
         loadingView.display(viewModel: FeedLoadingViewModel(isLoading: false))
         feedErrorView.display(FeedErrorViewModel(errorMessage: FeedPresenter.feedLoadError))
     }
 
 
     static var feedLoadError: String {
-        NSLocalizedString("FEED_VIEW_CONNECTION_ERROR",
+        NSLocalizedString("GENERIC_CONNECTION_ERROR",
                           tableName: "Feed",
                           bundle: Bundle(for: FeedPresenter.self),
                           comment: "Title for the feed view")
