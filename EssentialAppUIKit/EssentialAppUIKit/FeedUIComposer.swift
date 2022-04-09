@@ -15,7 +15,7 @@ public final class FeedUIComposer {
     
     public static func feedComposedWith(feedLoader: @escaping () -> AnyPublisher<[FeedImage], Swift.Error>, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) -> FeedViewController {
 
-        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: { feedLoader().dispatchOnMainQueue() })
+        let presentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapter>(loader: { feedLoader().dispatchOnMainQueue() })
 
         let controller = FeedViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
         
@@ -104,25 +104,22 @@ private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, 
     }
 }
 
-final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
+final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
 
-    private var feedLoader: () -> AnyPublisher<[FeedImage], Swift.Error>
-    var presenter: LoadResourcePresenter<[FeedImage], FeedViewAdapter>?
+    private var loader: () -> AnyPublisher<Resource, Swift.Error>
+    var presenter: LoadResourcePresenter<Resource, FeedViewAdapter>?
 
     private var cancellable: Cancellable?
 
-    init(feedLoader: @escaping ()->AnyPublisher<[FeedImage], Swift.Error>) {
-        self.feedLoader = feedLoader
+    init(loader: @escaping ()->AnyPublisher<Resource, Swift.Error>) {
+        self.loader = loader
     }
+
     
-    func didRequestFeedRefresh() {
-        loadFeed()
-    }
-    
-    func loadFeed() {
+    func loadResource() {
         presenter?.didStartLoading()
 
-        cancellable = feedLoader().sink(
+        cancellable = loader().sink(
             receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished:
@@ -131,10 +128,16 @@ final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
                     self?.presenter?.didFinishLoading(with: error)
 
                 }
-            }, receiveValue: { [weak self] feed in
-                self?.presenter?.didFinishLoading(with: feed)
+            }, receiveValue: { [weak self] resource in
+                self?.presenter?.didFinishLoading(with: resource)
             })
 
+    }
+}
+extension LoadResourcePresentationAdapter: FeedViewControllerDelegate {
+
+    func didRequestFeedRefresh() {
+        loadResource()
     }
 }
 
