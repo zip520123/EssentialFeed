@@ -360,8 +360,8 @@
 			children = (
 				8F2AD0B32801BD6D002D39F2 /* ResourceLoadingView.swift */,
 				8F2AD0A62801A833002D39F2 /* LoadResourcePresenter.swift */,
-				8F2AD0AE2801B582002D39F2 /* Shared.strings */,
 				8F2AD0B52801C180002D39F2 /* ResourceErrorView.swift */,
+				8F2AD0AE2801B582002D39F2 /* Shared.strings */,
 			);
 			path = "Share Presentation";
 			sourceTree = "<group>";

@@ -25,7 +25,7 @@ public final class FeedPresenter {
         loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: true))
     }
     public func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView.display(viewModel: FeedViewModel(feeds: feed))
+        feedView.display(viewModel: Self.map(feed))
         loadingView.display(viewModel: ResourceLoadingViewModel(isLoading: false))
     }
     public func didFinishLoadingFeed(with error: Error) {
@@ -33,6 +33,9 @@ public final class FeedPresenter {
         feedErrorView.display(ResourceErrorViewModel(errorMessage: FeedPresenter.feedLoadError))
     }
 
+    public static func map(_ feeds: [FeedImage]) -> FeedViewModel {
+        FeedViewModel(feeds: feeds)
+    }
 
     static var feedLoadError: String {
         NSLocalizedString("GENERIC_CONNECTION_ERROR",

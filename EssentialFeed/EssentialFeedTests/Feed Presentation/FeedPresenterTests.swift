@@ -12,6 +12,12 @@ class FeedPresenterTests: XCTestCase {
         XCTAssertEqual(FeedPresenter.title, localized("FEED_VIEW_TITLE"))
     }
 
+    func test_map_createsViewModel() {
+        let feed = uniqueImageFeed().models
+        let viewModel = FeedPresenter.map(feed)
+        XCTAssertEqual(viewModel.feeds, feed)
+    }
+
     func test_didStartLoadingFeed_displaysNoErrorMessageAndStartLoading() {
         let (sut, view) = makeSUT()
 
