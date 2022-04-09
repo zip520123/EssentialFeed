@@ -19,10 +19,11 @@ public final class FeedUIComposer {
 
         let controller = FeedViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
         
-        presentationAdapter.presenter = FeedPresenter(
+        presentationAdapter.presenter = LoadResourcePresenter(
             feedErrorView: WeakRefVirturalProxy(controller),
             loadingView: WeakRefVirturalProxy(controller),
-            feedView: FeedViewAdapter(controller: controller, imageLoader: { imageLoader($0).dispatchOnMainQueue() } )
+            resourceView: FeedViewAdapter(controller: controller, imageLoader: { imageLoader($0).dispatchOnMainQueue() } ),
+            mapper: FeedPresenter.map
             )
          
         return controller
@@ -42,8 +43,8 @@ extension FeedViewController {
     }
 }
 
-private final class FeedViewAdapter: FeedView {
-    
+final class FeedViewAdapter: ResourceView {
+
     init(controller: FeedViewController, imageLoader: @escaping (URL)->FeedImageDataLoader.Publisher) {
         self.controller = controller
         self.imageLoader = imageLoader
@@ -52,7 +53,7 @@ private final class FeedViewAdapter: FeedView {
     private weak var controller: FeedViewController?
     private let imageLoader: (URL)->FeedImageDataLoader.Publisher
     
-    func display(viewModel: FeedViewModel) {
+    func display(_ viewModel: FeedViewModel) {
         controller?.display(viewModel.feeds.map { feed in
             let adapter = FeedImageDataLoaderPresentationAdapter<WeakRefVirturalProxy<FeedImageCellController>, UIImage>(model: feed, imageLoader: imageLoader)
             let view = FeedImageCellController(adapter)
@@ -105,8 +106,9 @@ private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, 
 
 final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
 
-    var feedLoader: () -> AnyPublisher<[FeedImage], Swift.Error>
-    var presenter: FeedPresenter?
+    private var feedLoader: () -> AnyPublisher<[FeedImage], Swift.Error>
+    var presenter: LoadResourcePresenter<[FeedImage], FeedViewAdapter>?
+
     private var cancellable: Cancellable?
 
     init(feedLoader: @escaping ()->AnyPublisher<[FeedImage], Swift.Error>) {
@@ -118,7 +120,7 @@ final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
     }
     
     func loadFeed() {
-        presenter?.didStartLoadingFeed()
+        presenter?.didStartLoading()
 
         cancellable = feedLoader().sink(
             receiveCompletion: { [weak self] completion in
@@ -126,11 +128,11 @@ final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
                 case .finished:
                     break
                 case let .failure(error):
-                    self?.presenter?.didFinishLoadingFeed(with: error)
+                    self?.presenter?.didFinishLoading(with: error)
 
                 }
             }, receiveValue: { [weak self] feed in
-                self?.presenter?.didFinishLoadingFeed(with: feed)
+                self?.presenter?.didFinishLoading(with: feed)
             })
 
     }
