@@ -61,7 +61,7 @@ class LoadResourcePresenterTests: XCTestCase {
 
     }
 
-    private class ViewSpy: FeedErrorView, ResourceLoadingView, ResourceView {
+    private class ViewSpy: ResourceErrorView, ResourceLoadingView, ResourceView {
         typealias ResourceViewModel = String
         enum Message: Hashable {
             case error(msg: String?)
@@ -69,7 +69,7 @@ class LoadResourcePresenterTests: XCTestCase {
             case display(resourceViewModel: String)
         }
         private(set) var msg = Set<Message>()
-        func display(_ viewModel: FeedErrorViewModel) {
+        func display(_ viewModel: ResourceErrorViewModel) {
             msg.insert(.error(msg: viewModel.errorMessage))
         }
         func display(viewModel: ResourceLoadingViewModel) {

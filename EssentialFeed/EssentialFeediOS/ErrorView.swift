@@ -42,8 +42,8 @@ public final class ErrorView: UIView {
 	}
 }
 
-extension ErrorView: FeedErrorView {
-    public func display(_ viewModel: FeedErrorViewModel) {
+extension ErrorView: ResourceErrorView {
+    public func display(_ viewModel: ResourceErrorViewModel) {
 		if let msg = viewModel.errorMessage {
 			show(message: msg)
 		} else {
