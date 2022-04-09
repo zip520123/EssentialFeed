@@ -11,6 +11,9 @@ class ImageCommentsPresenterTests: XCTestCase {
 
     func test_map_createsViewModel() {
         let now = Date()
+        let calender = Calendar(identifier: .gregorian)
+        let locale = Locale(identifier: "en_US_POSIX")
+
         let comments = [
             ImageComment(
                 id: UUID(),
@@ -24,7 +27,7 @@ class ImageCommentsPresenterTests: XCTestCase {
                 username: "another username")
         ]
 
-        let viewModel = ImageCommentsPresenter.map(comments)
+        let viewModel = ImageCommentsPresenter.map(comments, now, calender, locale)
         XCTAssertEqual(viewModel.comments, [ImageCommentViewModel(
                 message: "a message",
                 date: "5 seconds ago",
