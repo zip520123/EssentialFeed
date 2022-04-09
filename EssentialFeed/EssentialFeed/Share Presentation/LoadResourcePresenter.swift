@@ -1,20 +1,25 @@
-
+public protocol ResourceView {
+    func display(_ viewModel: String)
+}
 public class LoadResourcePresenter {
+    public typealias Mapper = (String)->String
     let feedErrorView: FeedErrorView
     let loadingView: FeedLoadingView
-    let feedView: FeedView
+    let resourceView: ResourceView
+    let mapper: Mapper
 
-    public init(feedErrorView: FeedErrorView, loadingView: FeedLoadingView, feedView: FeedView) {
+    public init(feedErrorView: FeedErrorView, loadingView: FeedLoadingView, resourceView: ResourceView, mapper: @escaping Mapper) {
         self.feedErrorView = feedErrorView
         self.loadingView = loadingView
-        self.feedView = feedView
+        self.resourceView = resourceView
+        self.mapper = mapper
     }
     public func didStartLoading() {
         feedErrorView.display(FeedErrorViewModel(errorMessage: nil))
         loadingView.display(viewModel: FeedLoadingViewModel(isLoading: true))
     }
-    public func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView.display(viewModel: FeedViewModel(feeds: feed))
+    public func didFinishLoading(with resource: String) {
+        resourceView.display(mapper(resource))
         loadingView.display(viewModel: FeedLoadingViewModel(isLoading: false))
     }
     public func didFinishLoadingFeed(with error: Error) {

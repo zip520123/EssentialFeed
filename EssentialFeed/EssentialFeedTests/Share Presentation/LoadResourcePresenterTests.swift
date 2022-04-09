@@ -22,13 +22,15 @@ class LoadResourcePresenterTests: XCTestCase {
         ])
     }
 
-    func test_didFinishLoadingFeed_displaysFeedAndStopsLoading() {
-        let (sut, view) = makeSUT()
-        let feed = uniqueImageFeed().models
-        sut.didFinishLoadingFeed(with: feed)
+    func test_didFinishLoadingResource_displaysResourceAndStopsLoading() {
+        let (sut, view) = makeSUT(mapper: { resource in
+            resource + " view model"
+        })
+
+        sut.didFinishLoading(with: "resource")
 
         XCTAssertEqual(view.msg, [
-            .display(feed: feed),
+            .display(resourceViewModel: "resource view model"),
             .loading(isLoading: false)
         ])
 
@@ -45,14 +47,38 @@ class LoadResourcePresenterTests: XCTestCase {
         ])
     }
 
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: LoadResourcePresenter, view: ViewSpy) {
+    private func makeSUT(
+        mapper: @escaping (String) -> String = { _ in "any" },
+        file: StaticString = #file,
+        line: UInt = #line) -> (sut: LoadResourcePresenter, view: ViewSpy) {
         let view = ViewSpy()
-        let sut = LoadResourcePresenter(feedErrorView: view, loadingView: view, feedView: view)
+            let sut = LoadResourcePresenter(feedErrorView: view, loadingView: view, resourceView: view, mapper: mapper)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
 
     }
+
+    private class ViewSpy: FeedErrorView, FeedLoadingView, ResourceView {
+
+        enum Message: Hashable {
+            case error(msg: String?)
+            case loading(isLoading: Bool)
+            case display(resourceViewModel: String)
+        }
+        private(set) var msg = Set<Message>()
+        func display(_ viewModel: FeedErrorViewModel) {
+            msg.insert(.error(msg: viewModel.errorMessage))
+        }
+        func display(viewModel: FeedLoadingViewModel) {
+            msg.insert(.loading(isLoading: viewModel.isLoading))
+        }
+        func display(_ viewModel: String) {
+            msg.insert(.display(resourceViewModel: viewModel))
+        }
+    }
+
+
 
     func localized(_ key: String, _ file: StaticString = #file, _ line: UInt = #line) -> String {
         let table = "Feed"
