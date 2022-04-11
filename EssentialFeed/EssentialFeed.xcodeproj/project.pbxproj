@@ -526,10 +526,10 @@
 		E756325B27418C49002B7D0B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E756324127346C9A002B7D0B /* FeedImageCell.swift */,
 				8F85AA1927F5C5BD000A94D8 /* FeedImageCellController.swift */,
 				8F85AA1727F5C51E000A94D8 /* ListViewController.swift */,
 				8FA5C25627B25030006386E8 /* ErrorView.swift */,
-				E756324127346C9A002B7D0B /* FeedImageCell.swift */,
 				E7D0E0A227677B890046FA6D /* Feed.storyboard */,
 				E70F14962771063600211F60 /* UITableView+Dequeueing.swift */,
 				E70F149D277107D400211F60 /* UIImageView+Animations.swift */,

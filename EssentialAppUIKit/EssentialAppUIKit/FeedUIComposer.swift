@@ -17,8 +17,9 @@ public final class FeedUIComposer {
 
         let presentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapter>(loader: { feedLoader().dispatchOnMainQueue() })
 
-        let controller = ListViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
-        
+        let controller = ListViewController.makeWith(title: FeedPresenter.title)
+        controller.onRefresh = presentationAdapter.loadResource
+
         presentationAdapter.presenter = LoadResourcePresenter(
             resourceErrorView: WeakRefVirturalProxy(controller),
             loadingView: WeakRefVirturalProxy(controller),
@@ -32,13 +33,13 @@ public final class FeedUIComposer {
 }
 
 extension ListViewController {
-    static func makeWith(delegate: FeedViewControllerDelegate, title: String) -> ListViewController {
+    static func makeWith(title: String) -> ListViewController {
         let bundle = Bundle(for: ListViewController.self)
         let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
         let controller = storyboard.instantiateInitialViewController() as! ListViewController
         
         controller.title = title
-        controller.delegate = delegate
+
         return controller
     }
 }
@@ -106,12 +107,6 @@ final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
                 self?.presenter?.didFinishLoading(with: resource)
             })
 
-    }
-}
-extension LoadResourcePresentationAdapter: FeedViewControllerDelegate {
-
-    func didRequestFeedRefresh() {
-        loadResource()
     }
 }
 
