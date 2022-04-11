@@ -357,7 +357,7 @@ final class FeedUIIntegrationTests: XCTestCase {
     
     //MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
         let sut = FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader.loadImagePublisher)
         
@@ -374,7 +374,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         FeedImage(id: UUID(), description: description, location: location, url: url)
     }
     
-    private func assertThat(_ sut: FeedViewController, shouldRender images: [FeedImage],  file: StaticString = #file, line: UInt = #line) {
+    private func assertThat(_ sut: ListViewController, shouldRender images: [FeedImage],  file: StaticString = #file, line: UInt = #line) {
         sut.tableView.layoutIfNeeded()
         RunLoop.main.run(until: Date())
 
@@ -382,7 +382,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         images.enumerated().forEach { assertThat(sut, with: $1, at: $0, file: file, line: line) }
     }
     
-    private func assertThat(_ sut: FeedViewController, with image: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
+    private func assertThat(_ sut: ListViewController, with image: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
         let view = sut.feedImageView(at: index) as? FeedImageCell
         XCTAssertNotNil(view, file: file, line: line)
         let shouldShowLocation = image.location != nil

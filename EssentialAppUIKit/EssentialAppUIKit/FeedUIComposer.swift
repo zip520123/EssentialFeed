@@ -13,11 +13,11 @@ import Combine
 public final class FeedUIComposer {
     private init() {}
     
-    public static func feedComposedWith(feedLoader: @escaping () -> AnyPublisher<[FeedImage], Swift.Error>, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) -> FeedViewController {
+    public static func feedComposedWith(feedLoader: @escaping () -> AnyPublisher<[FeedImage], Swift.Error>, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) -> ListViewController {
 
         let presentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapter>(loader: { feedLoader().dispatchOnMainQueue() })
 
-        let controller = FeedViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
+        let controller = ListViewController.makeWith(delegate: presentationAdapter, title: FeedPresenter.title)
         
         presentationAdapter.presenter = LoadResourcePresenter(
             resourceErrorView: WeakRefVirturalProxy(controller),
@@ -31,11 +31,11 @@ public final class FeedUIComposer {
     
 }
 
-extension FeedViewController {
-    static func makeWith(delegate: FeedViewControllerDelegate, title: String) -> FeedViewController {
-        let bundle = Bundle(for: FeedViewController.self)
+extension ListViewController {
+    static func makeWith(delegate: FeedViewControllerDelegate, title: String) -> ListViewController {
+        let bundle = Bundle(for: ListViewController.self)
         let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
-        let controller = storyboard.instantiateInitialViewController() as! FeedViewController
+        let controller = storyboard.instantiateInitialViewController() as! ListViewController
         
         controller.title = title
         controller.delegate = delegate
@@ -45,12 +45,12 @@ extension FeedViewController {
 
 final class FeedViewAdapter: ResourceView {
 
-    init(controller: FeedViewController, imageLoader: @escaping (URL)->FeedImageDataLoader.Publisher) {
+    init(controller: ListViewController, imageLoader: @escaping (URL)->FeedImageDataLoader.Publisher) {
         self.controller = controller
         self.imageLoader = imageLoader
     }
     
-    private weak var controller: FeedViewController?
+    private weak var controller: ListViewController?
     private let imageLoader: (URL)->FeedImageDataLoader.Publisher
     
     func display(_ viewModel: FeedViewModel) {

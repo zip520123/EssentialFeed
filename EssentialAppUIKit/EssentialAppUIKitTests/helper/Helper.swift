@@ -3,7 +3,7 @@ import UIKit
 import EssentialFeediOS
 import EssentialAppUIKit
 
-extension FeedViewController {
+extension ListViewController {
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
     }
