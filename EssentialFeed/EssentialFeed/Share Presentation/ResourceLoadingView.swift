@@ -6,5 +6,9 @@ public protocol ResourceLoadingView {
 }
 
 public struct ResourceLoadingViewModel {
+    public init(isLoading: Bool) {
+        self.isLoading = isLoading
+    }
+
     public let isLoading: Bool
 }
