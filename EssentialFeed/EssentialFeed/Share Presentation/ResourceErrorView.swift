@@ -5,6 +5,9 @@ public protocol ResourceErrorView {
 
 public struct ResourceErrorViewModel {
     public let errorMessage: String?
+    public init(errorMessage: String?) {
+        self.errorMessage = errorMessage
+    }
 }
 
 extension ResourceErrorViewModel: Equatable {
