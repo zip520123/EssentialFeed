@@ -8,8 +8,6 @@
 import UIKit
 import EssentialFeed
 
-public typealias CellController = UITableViewDelegate & UITableViewDataSource & UITableViewDataSourcePrefetching
-
 
 final public class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
 
@@ -63,26 +61,26 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let controller = cellController(for: indexPath)
-        return controller.tableView(tableView, cellForRowAt: indexPath)
+        let ds = cellController(for: indexPath).dataSource
+        return ds.tableView(tableView, cellForRowAt: indexPath)
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let controller = removeLoadingController(indexPath)
-        controller?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
+        let dl = removeLoadingController(indexPath)?.delegate
+        dl?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { (indexPath) in
-            let controller = cellController(for: indexPath)
-            controller.tableView(tableView, prefetchRowsAt: [indexPath])
+            let dsp = cellController(for: indexPath).dataSourcePrefetching
+            dsp?.tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let controller = cellController(for: indexPath)
-            controller.tableView!(tableView, cancelPrefetchingForRowsAt: [indexPath])
+            let dsp = cellController(for: indexPath).dataSourcePrefetching
+            dsp?.tableView!(tableView, cancelPrefetchingForRowsAt: [indexPath])
         }
     }
     
