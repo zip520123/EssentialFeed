@@ -17,13 +17,5 @@ public class ImageCommentCellController: CellController {
 
     }
 
-    public func preload() {
-
-    }
-
-    public func cancelLoad() {
-
-    }
-
 
 }
