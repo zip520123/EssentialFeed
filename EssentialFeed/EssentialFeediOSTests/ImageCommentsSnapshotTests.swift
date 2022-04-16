@@ -29,7 +29,7 @@ class ImageCommentsSnapshotTests: XCTestCase {
 
     private func comments() -> [CellController] {
         commentControllers().map { controller in
-            CellController(controller)
+            CellController(id: controller, controller)
         }
     }
 
