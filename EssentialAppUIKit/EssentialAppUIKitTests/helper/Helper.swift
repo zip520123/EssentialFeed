@@ -9,7 +9,7 @@ extension ListViewController {
     }
 
     func simulateTapOnErrorMessage() {
-        errorView.button.simulateTap()
+        errorView.simulateTap()
     }
 
     @discardableResult

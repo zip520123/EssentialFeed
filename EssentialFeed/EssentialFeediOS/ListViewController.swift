@@ -8,15 +8,13 @@
 import UIKit
 import EssentialFeed
 
-
 final public class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
 
     public func display(viewModel: ResourceLoadingViewModel) {
         viewModel.isLoading ? refreshControl?.beginRefreshing() : refreshControl?.endRefreshing()
-        
     }
     
-    @IBOutlet private(set) public weak var errorView: ErrorView!
+    public let errorView = ErrorView()
     public var onRefresh: (()->())?
 
     private var feeds: [CellController] = [] {
@@ -29,7 +27,26 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        configureErrorView()
         refresh()
+    }
+
+    private func configureErrorView() {
+        let container = UIView()
+        container.backgroundColor = .clear
+        container.addSubview(errorView)
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        errorView.leadingAnchor.constraint(equalTo: container.leadingAnchor).isActive = true
+        container.trailingAnchor.constraint(equalTo: errorView.trailingAnchor).isActive = true
+        errorView.topAnchor.constraint(equalTo: container.topAnchor).isActive = true
+        container.bottomAnchor.constraint(equalTo: errorView.bottomAnchor).isActive = true
+
+        tableView.tableHeaderView = container
+        errorView.onHide = { [weak self] in
+            self?.tableView.beginUpdates()
+            self?.tableView.sizeTableHeaderToFit()
+            self?.tableView.endUpdates()
+        }
     }
 
     public override func viewDidLayoutSubviews() {
