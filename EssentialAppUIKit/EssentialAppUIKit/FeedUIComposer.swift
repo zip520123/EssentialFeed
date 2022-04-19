@@ -120,7 +120,7 @@ extension LoadResourcePresentationAdapter: FeedImageCellControllerDelegate {
     }
 }
 
-private final class WeakRefVirturalProxy<T: AnyObject> {
+final class WeakRefVirturalProxy<T: AnyObject> {
     private weak var object: T?
     init(_ object: T) {
         self.object = object
