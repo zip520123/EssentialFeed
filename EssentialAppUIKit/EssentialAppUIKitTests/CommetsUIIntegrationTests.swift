@@ -89,7 +89,7 @@ class CommetsUIIntegrationTests: FeedUIIntegrationTests {
 
     }
 
-    override func test_loadFeedCompletion_doesNotAlterCurrentRenderingStateOnError() {
+    func test_loadCommentsCompletion_doesNotAlterCurrentRenderingStateOnError() {
         let comment = makeComment()
         let (sut, loader) = makeSUT()
 
