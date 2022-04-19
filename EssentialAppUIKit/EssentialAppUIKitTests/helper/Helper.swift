@@ -46,6 +46,10 @@ extension ListViewController {
         tableView.numberOfRows(inSection: feedImageSection)
     }
 
+}
+
+extension ListViewController {
+
     func feedImageView(at row: Int) -> UITableViewCell? {
         guard numberOfRenderedFeedImageView() > row else {return nil}
         let ds = tableView.dataSource
@@ -62,6 +66,33 @@ extension ListViewController {
     }
 }
 
+extension ListViewController {
+    func numberOfRenderedComments() -> Int {
+        tableView.numberOfSections == 0 ? 0 :
+        tableView.numberOfRows(inSection: commentsSection)
+    }
+
+    private var commentsSection: Int { 0 }
+
+    func commentMessage(at row: Int) -> String? {
+        commentView(at: row)?.messageLabel.text
+    }
+
+    func commentUsername(at row: Int) -> String? {
+        commentView(at: row)?.usernameLabel.text
+    }
+
+    func commentDate(at row: Int) -> String? {
+        commentView(at: row)?.dateLabel.text
+    }
+
+    private func commentView(at row: Int) -> ImageCommentCell? {
+        guard numberOfRenderedFeedImageView() > row else {return nil}
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: commentsSection)
+        return ds?.tableView(tableView, cellForRowAt: index) as? ImageCommentCell
+    }
+}
 extension FeedImageCell {
     func simulateRetryAction() {
         feedImageRetryButton.simulateTap()
