@@ -9,13 +9,11 @@ import Combine
 
 class CommetsUIIntegrationTests: FeedUIIntegrationTests {
 
-    override func test_feedView_hasTitle() {
+    func test_CommentsView_hasTitle() {
         let (sut, _) = makeSUT()
         sut.loadViewIfNeeded()
 
-        let key = "FEED_VIEW_TITLE"
-
-        XCTAssertEqual(sut.title, localized(key))
+        XCTAssertEqual(sut.title, ImageCommentsPresenter.title)
     }
 
     override func test_loadFeedActions_requestFeedFromLoader() {
