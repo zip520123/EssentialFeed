@@ -38,25 +38,55 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func configureWindow() {
-        window?.rootViewController = UINavigationController(rootViewController:  FeedUIComposer.feedComposedWith(
+        let nav = UINavigationController()
+        let rootVC = FeedUIComposer.feedComposedWith(
             feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-            imageLoader: makeLocalImageLoaderWithRemoteFallback)
+            imageLoader: makeLocalImageLoaderWithRemoteFallback,
+            selection: { [baseURL, httpClient] image in
+                let url = Self.imageCommentsEndpoint(baseURL: baseURL, image: image)
+
+                let commentsVC = CommentsUIComposer.commentsComposedWith(
+                    commentsLoader: {
+                        Self.makeCommentsLoader(client: httpClient, url: url)
+                    })
+                Self.showImageComment(nav: nav, commentVC: commentsVC)
+            }
         )
+        nav.setViewControllers([rootVC], animated: false)
+        window?.rootViewController = nav
         window?.makeKeyAndVisible()
+    }
+
+    private static func showImageComment(nav: UINavigationController?, commentVC: UIViewController) {
+        nav?.show(commentVC, sender: nil)
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
         localFeedLoader.validateCache { _ in }
     }
 
+    private lazy var baseURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
+
     private func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[FeedImage], Error> {
-        let url = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
+        let url = baseURL.appendingPathComponent("v1/feed")
 
         return httpClient
             .getPublisher(from: url)
             .tryMap(FeedItemMapper.map)
             .caching(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
+    }
+
+    private static func imageCommentsEndpoint(baseURL: URL, image: FeedImage) -> URL {
+        baseURL.appendingPathComponent("v1/image").appendingPathComponent(image.id.uuidString).appendingPathComponent("comments")
+    }
+
+    private static func makeCommentsLoader(client: HTTPClient, url: URL) -> AnyPublisher<[ImageComment], Error> {
+        return client
+            .getPublisher(from: url)
+            .tryMap(ImageCommentsMapper.map)
+            .eraseToAnyPublisher()
+
     }
 
     private func makeLocalImageLoaderWithRemoteFallback(url: URL) -> FeedImageDataLoader.Publisher {
