@@ -46,6 +46,10 @@ extension ListViewController {
         tableView.numberOfRows(inSection: feedImageSection)
     }
 
+    func simulateTapOnFeedImage(at row: Int) {
+        let ds = tableView.delegate
+        ds?.tableView?(tableView, didSelectRowAt: IndexPath(row: row, section: feedImageSection))
+    }
 }
 
 extension ListViewController {

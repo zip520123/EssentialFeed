@@ -72,6 +72,11 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     public func errorViewIsVisible() -> Bool {
         errorView.isVisible
     }
+
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let dl = cellController(for: indexPath)?.delegate
+        dl?.tableView?(tableView, didSelectRowAt: indexPath)
+    }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let dl = cellController(for: indexPath)?.delegate
