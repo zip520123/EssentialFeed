@@ -419,17 +419,17 @@ class FeedUIIntegrationTests: XCTestCase {
     class LoaderSpy: FeedImageDataLoader {
         
         var loadFeedCallCount: Int { feedRequests.count }
-        private(set) var feedRequests = [PassthroughSubject<[FeedImage], Swift.Error>]()
+        private(set) var feedRequests = [PassthroughSubject<Paginated<FeedImage>, Swift.Error>]()
 
-        func loadPublisher() -> AnyPublisher<[FeedImage], Swift.Error> {
+        func loadPublisher() -> AnyPublisher<Paginated<FeedImage>, Swift.Error> {
 
-            let publisher = PassthroughSubject<[FeedImage], Swift.Error>()
+            let publisher = PassthroughSubject<Paginated<FeedImage>, Swift.Error>()
             feedRequests.append(publisher)
             return publisher.eraseToAnyPublisher()
         }
 
         func completeFeedLoading(with feed: [FeedImage] = [], at index: Int) {
-            feedRequests[index].send(feed)
+            feedRequests[index].send(Paginated(items: feed))
         }
         
         func completeFeedLoadingWithError(at index: Int = 0) {
