@@ -50,6 +50,17 @@ extension ListViewController {
         let ds = tableView.delegate
         ds?.tableView?(tableView, didSelectRowAt: IndexPath(row: row, section: feedImageSection))
     }
+
+    func simulateLoadMoreFeedAction() {
+        let indexPath = IndexPath(row: 0, section: feedLoadMoreSection)
+        guard let view = tableView.cellForRow(at: indexPath) else { return }
+        let dl = tableView.delegate
+        dl?.tableView?(tableView, willDisplay: view, forRowAt: indexPath)
+    }
+
+    private var feedLoadMoreSection: Int {
+        1
+    }
 }
 
 extension ListViewController {

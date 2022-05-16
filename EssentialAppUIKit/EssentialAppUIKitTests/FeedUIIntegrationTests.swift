@@ -55,6 +55,18 @@ class FeedUIIntegrationTests: XCTestCase {
         sut.simulateUserInitiatedReload()
         XCTAssertEqual(loader.loadFeedCallCount, 3, "Expected a third loading request once user initiates another load")
     }
+
+    func test_loadMoreActions_requestMoreFromLoader() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(at: 0)
+
+        XCTAssertEqual(loader.loadMoreCount, 0, "Expected a loading request until load more action")
+
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertEqual(loader.loadMoreCount, 1, "Expected load more request")
+
+    }
     
     func test_loadingIndicator_isVisibleWhileLoadingFeed() {
         let (sut, loader) = makeSUT()
@@ -421,6 +433,8 @@ class FeedUIIntegrationTests: XCTestCase {
         var loadFeedCallCount: Int { feedRequests.count }
         private(set) var feedRequests = [PassthroughSubject<Paginated<FeedImage>, Swift.Error>]()
 
+        private(set) var loadMoreCount = 0
+
         func loadPublisher() -> AnyPublisher<Paginated<FeedImage>, Swift.Error> {
 
             let publisher = PassthroughSubject<Paginated<FeedImage>, Swift.Error>()
@@ -429,7 +443,9 @@ class FeedUIIntegrationTests: XCTestCase {
         }
 
         func completeFeedLoading(with feed: [FeedImage] = [], at index: Int) {
-            feedRequests[index].send(Paginated(items: feed))
+            feedRequests[index].send(Paginated(items: feed, loadMore: { [weak self] _ in
+                self?.loadMoreCount += 1
+            }))
         }
         
         func completeFeedLoadingWithError(at index: Int = 0) {
