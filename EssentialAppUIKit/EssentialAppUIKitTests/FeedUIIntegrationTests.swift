@@ -66,6 +66,8 @@ class FeedUIIntegrationTests: XCTestCase {
         sut.simulateLoadMoreFeedAction()
         XCTAssertEqual(loader.loadMoreCount, 1, "Expected load more request")
 
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertEqual(loader.loadMoreCount, 1, "Expected no request while loading more")
     }
     
     func test_loadingIndicator_isVisibleWhileLoadingFeed() {
