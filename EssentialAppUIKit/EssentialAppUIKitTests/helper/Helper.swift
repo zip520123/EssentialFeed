@@ -53,7 +53,9 @@ extension ListViewController {
 
     func simulateLoadMoreFeedAction() {
         let indexPath = IndexPath(row: 0, section: feedLoadMoreSection)
-        guard let view = tableView.cellForRow(at: indexPath) else { return }
+        let ds = tableView.dataSource
+        guard let view = ds?.tableView(tableView, cellForRowAt: indexPath) else { return }
+
         let dl = tableView.delegate
         dl?.tableView?(tableView, willDisplay: view, forRowAt: indexPath)
     }
