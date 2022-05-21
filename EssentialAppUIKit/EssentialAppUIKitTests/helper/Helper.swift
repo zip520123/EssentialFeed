@@ -51,13 +51,23 @@ extension ListViewController {
         ds?.tableView?(tableView, didSelectRowAt: IndexPath(row: row, section: feedImageSection))
     }
 
+    func numberOfRows(in section: Int) -> Int {
+        tableView.numberOfSections > section ? tableView.numberOfRows(inSection: section) : 0
+    }
+
     func simulateLoadMoreFeedAction() {
-        let indexPath = IndexPath(row: 0, section: feedLoadMoreSection)
+        if numberOfRows(in: feedLoadMoreSection) == 0 {
+            //prevent indexPath doesn’t exist in the data source
+            //loadMoreCell in section doesn't exist
+            //Invalid parameter not satisfying: itemIdentifier (NSInternalInconsistencyException)
+            return
+        }
         let ds = tableView.dataSource
-        guard let view = ds?.tableView(tableView, cellForRowAt: indexPath) else { return }
+        let indexPathForLoadMoreCell = IndexPath(row: 0, section: feedLoadMoreSection)
+        guard let view = ds?.tableView(tableView, cellForRowAt: indexPathForLoadMoreCell) as? LoadMoreCell else { return }
 
         let dl = tableView.delegate
-        dl?.tableView?(tableView, willDisplay: view, forRowAt: indexPath)
+        dl?.tableView?(tableView, willDisplay: view, forRowAt: indexPathForLoadMoreCell)
     }
 
     private var feedLoadMoreSection: Int {
