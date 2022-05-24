@@ -390,7 +390,7 @@ class FeedUIIntegrationTests: XCTestCase {
             exp.fulfill()
         }
 
-        wait(for: [exp], timeout: 1)
+        wait(for: [exp], timeout: 3)
     }
     
     func test_loadImageDataCompletion_dispatchsFromBackgroundToMainThread() {
@@ -435,6 +435,21 @@ class FeedUIIntegrationTests: XCTestCase {
         loader.completeFeedLoadingWithError()
         sut.simulateUserInitiatedReload()
         XCTAssertFalse(sut.errorViewIsVisible())
+    }
+
+    func test_loadMoreCompletion_renderErrorMessageOnError() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(at: 0)
+
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertFalse(sut.loadMoreFeedErrorViewIsVisible())
+
+        loader.completeLoadMoreWithError()
+        XCTAssertTrue(sut.loadMoreFeedErrorViewIsVisible())
+
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertFalse(sut.loadMoreFeedErrorViewIsVisible())
     }
     
     //MARK: - Helpers

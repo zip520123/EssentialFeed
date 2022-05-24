@@ -70,6 +70,10 @@ extension ListViewController {
         dl?.tableView?(tableView, willDisplay: view, forRowAt: indexPathForLoadMoreCell)
     }
 
+    func loadMoreFeedErrorViewIsVisible() -> Bool {
+        return loadMoreFeedCell()?.message != nil
+    }
+
     private func loadMoreFeedCell() -> LoadMoreCell? {
         if numberOfRows(in: feedLoadMoreSection) == 0 {
             return nil
