@@ -451,7 +451,23 @@ class FeedUIIntegrationTests: XCTestCase {
         sut.simulateLoadMoreFeedAction()
         XCTAssertFalse(sut.loadMoreFeedErrorViewIsVisible())
     }
-    
+
+    func test_tapOnLoadMoreErrorView_loadMore() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(at: 0)
+
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertEqual(loader.loadMoreCount, 1)
+
+        sut.simulateTapOnLoadMoreErrorView()
+        XCTAssertEqual(loader.loadMoreCount, 1)
+
+        loader.completeLoadMoreWithError()
+        sut.simulateTapOnLoadMoreErrorView()
+        XCTAssertEqual(loader.loadMoreCount, 2)
+    }
+
     //MARK: - Helpers
     
     private func makeSUT(

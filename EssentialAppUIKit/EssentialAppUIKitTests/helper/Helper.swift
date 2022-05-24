@@ -70,6 +70,12 @@ extension ListViewController {
         dl?.tableView?(tableView, willDisplay: view, forRowAt: indexPathForLoadMoreCell)
     }
 
+    func simulateTapOnLoadMoreErrorView() {
+        let loadMoreCellIndexPath = IndexPath(row: 0, section: feedLoadMoreSection)
+        let dl = tableView.delegate
+        dl?.tableView?(tableView, didSelectRowAt: loadMoreCellIndexPath)
+    }
+
     func loadMoreFeedErrorViewIsVisible() -> Bool {
         return loadMoreFeedCell()?.message != nil
     }

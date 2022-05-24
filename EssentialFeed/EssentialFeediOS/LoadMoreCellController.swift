@@ -19,10 +19,17 @@ public class LoadMoreCellController: NSObject, UITableViewDataSource, UITableVie
     }
 
     public func tableView(_ tableView: UITableView, willDisplay: UITableViewCell, forRowAt indexPath: IndexPath) {
+        reloadIfNeed()
+    }
+
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        reloadIfNeed()
+    }
+
+    private func reloadIfNeed() {
         guard !cell.isLoading else { return }
         callBack()
     }
-
 }
 
 extension LoadMoreCellController: ResourceLoadingView, ResourceErrorView {
