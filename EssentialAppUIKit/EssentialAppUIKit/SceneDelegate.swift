@@ -68,7 +68,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private lazy var baseURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
 
     private func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<Paginated<FeedImage>, Error> {
-        let url = baseURL.appendingPathComponent("v1/feed")
+        let url = FeedEndpoint.get(baseURL: baseURL)
 
         return httpClient
             .getPublisher(from: url)
