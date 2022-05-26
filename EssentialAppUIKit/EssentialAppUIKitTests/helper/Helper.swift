@@ -105,6 +105,10 @@ extension ListViewController {
     private var feedLoadMoreSection: Int {
         1
     }
+
+    func canLoadMoreFeed() -> Bool {
+        loadMoreFeedCell() != nil
+    }
 }
 
 extension ListViewController {
