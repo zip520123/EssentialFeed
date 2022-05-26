@@ -92,7 +92,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     .map { newItems in
                         let all = items + newItems
                         return Paginated(items: all, loadMorePublisher: self.makeRemoteLoadMoreLoader(items: items+newItems, last: newItems.last))
-                    }.eraseToAnyPublisher()
+                    }
+                    .caching(to: self.localFeedLoader)
+                    .eraseToAnyPublisher()
             }
         }
 
