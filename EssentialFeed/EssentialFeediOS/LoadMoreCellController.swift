@@ -8,6 +8,7 @@ public class LoadMoreCellController: NSObject, UITableViewDataSource, UITableVie
 
     public init(callBack: @escaping () -> () = {}) {
         self.callBack = callBack
+        cell.selectionStyle = .none
     }
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
