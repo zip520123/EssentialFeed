@@ -5,7 +5,7 @@ import EssentialFeed
 public class LoadMoreCellController: NSObject, UITableViewDataSource, UITableViewDelegate {
     private let cell = LoadMoreCell()
     private let callBack: ()->()
-
+    private var ob: NSKeyValueObservation?
     public init(callBack: @escaping () -> () = {}) {
         self.callBack = callBack
         cell.selectionStyle = .none
@@ -25,6 +25,15 @@ public class LoadMoreCellController: NSObject, UITableViewDataSource, UITableVie
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         reloadIfNeed()
+        ob = tableView.observe(\.contentOffset, options: .new) { [weak self] _,_  in
+            if !tableView.isDragging {
+                self?.reloadIfNeed()
+            }
+        }
+    }
+
+    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        ob = nil
     }
 
     private func reloadIfNeed() {
