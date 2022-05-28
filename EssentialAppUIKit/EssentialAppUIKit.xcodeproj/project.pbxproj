@@ -26,6 +26,7 @@
 		8FF1DC5C27C448750019EA5C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF1DC5B27C448750019EA5C /* ViewController.swift */; };
 		8FF1DC6127C448770019EA5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FF1DC6027C448770019EA5C /* Assets.xcassets */; };
 		8FF1DC6427C448770019EA5C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8FF1DC6227C448770019EA5C /* LaunchScreen.storyboard */; };
+		8FF9377928427B2B0021C61D /* NullStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9377828427B2A0021C61D /* NullStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		8FF1DC6327C448770019EA5C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8FF1DC6527C448770019EA5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8FF1DC6A27C448770019EA5C /* EssentialAppUIKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialAppUIKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FF9377828427B2A0021C61D /* NullStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 				8FF1DC6227C448770019EA5C /* LaunchScreen.storyboard */,
 				8FF1DC6527C448770019EA5C /* Info.plist */,
 				8F1B968B27FF9059000A2F41 /* CombineHelpers.swift */,
+				8FF9377828427B2A0021C61D /* NullStore.swift */,
 			);
 			path = EssentialAppUIKit;
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 				8FF1DC5C27C448750019EA5C /* ViewController.swift in Sources */,
 				8F9CA0D9280EBA2D00DD3305 /* CommentsUIComposer.swift in Sources */,
 				8FF1DC5827C448750019EA5C /* AppDelegate.swift in Sources */,
+				8FF9377928427B2B0021C61D /* NullStore.swift in Sources */,
 				8FF1DC5A27C448750019EA5C /* SceneDelegate.swift in Sources */,
 				8F1B968C27FF9059000A2F41 /* CombineHelpers.swift in Sources */,
 				8F85AA0A27F4B57C000A94D8 /* FeedUIComposer.swift in Sources */,
