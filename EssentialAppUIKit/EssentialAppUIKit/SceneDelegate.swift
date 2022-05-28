@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                     .defaultDirectoryURL()
                                     .appendingPathComponent("feed-store.sqlite"))
         } catch {
+            assertionFailure("Failure to init CoreDataFeedStore error: \(error)")
             return NullStore()
         }
 
