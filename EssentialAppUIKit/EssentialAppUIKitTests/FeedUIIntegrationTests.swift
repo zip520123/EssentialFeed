@@ -50,8 +50,13 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(loader.loadFeedCallCount, 1, "Expected a loading request once view is loaded")
                 
         sut.simulateUserInitiatedReload()
+        XCTAssertEqual(loader.loadFeedCallCount, 1, "Expected no request until previous completes")
+
+        loader.completeFeedLoading(at: 0)
+        sut.simulateUserInitiatedReload()
         XCTAssertEqual(loader.loadFeedCallCount, 2, "Expected another loading request once user initiates a load")
-        
+
+        loader.completeFeedLoading(at: 1)
         sut.simulateUserInitiatedReload()
         XCTAssertEqual(loader.loadFeedCallCount, 3, "Expected a third loading request once user initiates another load")
     }
@@ -410,6 +415,29 @@ class FeedUIIntegrationTests: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
 
+    func test_feedImageView_doesNotLoadImageAgainUntilPreviousRequestCompletes() {
+        let image = makeImage(url: URL(string: "http://url-0.com")!)
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [image], at: 0)
+
+        sut.simulateFeedImageViewNearVisiable(at: 0)
+        XCTAssertEqual(loader.loadedImageURLs, [image.imageURL], "Expected first queust when near visiable")
+
+        sut.simulateFeedImageViewVisiable(at: 0)
+        XCTAssertEqual(loader.loadedImageURLs, [image.imageURL], "Expected no request until previous completes")
+
+        loader.completeImageLoading(at: 0)
+        sut.simulateFeedImageViewVisiable(at: 0)
+        XCTAssertEqual(loader.loadedImageURLs, [image.imageURL, image.imageURL], "Expected visiable after completes")
+
+
+        sut.simulateFeedImageViewNotVisiable(at: 0)
+        sut.simulateFeedImageViewVisiable(at: 0)
+        XCTAssertEqual(loader.loadedImageURLs, [image.imageURL, image.imageURL, image.imageURL], "Expected third request when visible after canceling previous complete")
+
+    }
+
     func test_loadFail_displayErrorMsg() {
         let (sut, loader) = makeSUT()
 
@@ -534,6 +562,7 @@ class FeedUIIntegrationTests: XCTestCase {
                 self?.loadMoreRequests.append(publisher)
                 return publisher.eraseToAnyPublisher()
             }))
+            feedRequests[index].send(completion: .finished)
         }
         
         func completeFeedLoadingWithError(at index: Int = 0) {
