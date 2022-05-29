@@ -24,7 +24,7 @@ extension Cache {
 	}
 
 	static func newUniqueInstance(in context: NSManagedObjectContext) throws -> Cache {
-		try find(in: context).map(context.delete)
+		try find(in: context).map(context.delete).map(context.save)
 		return Cache(context: context)
 	}
 
