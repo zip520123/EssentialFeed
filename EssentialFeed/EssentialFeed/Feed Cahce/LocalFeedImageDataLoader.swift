@@ -72,21 +72,19 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader, ImageDataCacheLoader
     public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
         let task = LoadImageDataTask()
         task.completion = completion
-        store.retrieve(dataForURL: url) { [weak self] result in
-            guard self != nil else { return }
-            switch result {
-            case .success(let data):
-                if data == nil {
-                    task.completion?(.failure(LoadError.notFound))
-                } else {
-                    task.completion?(.success(data!))
-                }
 
-            case .failure:
-                task.completion?(.failure(LoadError.failed))
+        task.completion?(
+            FeedImageDataLoader.Result {
+                try store.retrieve(dataForURL: url)
             }
+            .mapError({ _ in
+                LoadError.failed
+            })
+            .flatMap { data in
+                data.map { .success($0) } ?? .failure(LoadError.notFound)
+            }
+        )
 
-        }
         return task
     }
 
