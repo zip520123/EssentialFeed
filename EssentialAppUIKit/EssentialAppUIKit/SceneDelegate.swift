@@ -123,14 +123,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func makeLocalImageLoaderWithRemoteFallback(url: URL) -> FeedImageDataLoader.Publisher {
-        let remoteImageLoader = RemoteImageDataLoader(client: httpClient)
+
         let localImageLoader = LocalFeedImageDataLoader(store: store)
         return localImageLoader
             .loadImagePublisher(from: url)
             .logCacheMisses(url, logger)
-            .fallback(to: { [logger] in
-                return remoteImageLoader
-                    .loadImagePublisher(from: url)
+            .fallback(to: { [logger, httpClient] in
+                
+                httpClient
+                    .getPublisher(from: url)
+                    .tryMap(FeedImageDataMapper.map)
                     .logElapedTime(url, logger)
                     .logErrors(url, logger)
                     .caching(to: localImageLoader, using: url)

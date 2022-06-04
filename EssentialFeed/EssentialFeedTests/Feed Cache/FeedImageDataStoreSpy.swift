@@ -6,7 +6,7 @@ class FeedImageDataStoreSpy: FeedImageDataStore {
     }
 
     private(set) var receivedMessages = [Msg]()
-    private var retrievalResult: FeedImageDataLoader.Result?
+    private var retrievalResult: Result<Data?, Error>?
     private var insertionResult: Result<Void, Error>?
 
     func retrieve(dataForURL url: URL) throws -> Data? {
