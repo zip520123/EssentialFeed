@@ -543,7 +543,7 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(view?.descriptionText, image.description, "Expected description text \(String(describing: image.description)), got \(String(describing: view?.descriptionText)) instead at index: \(index)" ,file: file, line: line)
     }
     
-    class LoaderSpy: FeedImageDataLoader {
+    class LoaderSpy {
         
         var loadFeedCallCount: Int { feedRequests.count }
         private(set) var feedRequests = [PassthroughSubject<Paginated<FeedImage>, Swift.Error>]()
@@ -592,34 +592,28 @@ class FeedUIIntegrationTests: XCTestCase {
         // MARK: FeedImageDataLoader
         
         var loadedImageURLs: [URL] {
-            imageRequest.map {$0.url}
+            imageRequests.map {$0.url}
         }
         
         private(set) var cancelledImageURLs = [URL]()
-        private var imageRequest = [(url: URL, completion: (FeedImageDataLoader.Result)-> Void)]()
-        struct LoaderSpyTask: FeedImageDataLoaderTask {
-            let cancelCompletion: (() -> Void)?
-            
-            func cancel() {
-                cancelCompletion?()
-            }
-        }
-        
-        func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result)-> Void) -> FeedImageDataLoaderTask {
-            
-            imageRequest.append((url, completion))
-            return LoaderSpyTask(cancelCompletion: { [weak self] in
+        private var imageRequests = [(url: URL, publisher: PassthroughSubject<Data, Error>)]()
+
+        func loadImagePublisher(from url: URL) -> AnyPublisher<Data, Error> {
+            let publisher = PassthroughSubject<Data, Error>()
+            imageRequests.append((url, publisher))
+            return publisher.handleEvents(receiveCancel: { [weak self] in
                 self?.cancelledImageURLs.append(url)
-            })
+            }).eraseToAnyPublisher()
         }
         
         func completeImageLoading(with imageData: Data = Data(), at index: Int) {
-            imageRequest[index].completion(.success(imageData))
+            imageRequests[index].publisher.send(imageData)
+            imageRequests[index].publisher.send(completion: .finished)
         }
         
         func completeImageLoadingWithError(at index: Int) {
             let error = NSError(domain: "Any Error", code: 0)
-            imageRequest[index].completion(.failure(error))
+            imageRequests[index].publisher.send(completion: .failure(error))
         }
     }
     

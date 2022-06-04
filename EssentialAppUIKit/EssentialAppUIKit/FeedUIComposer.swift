@@ -75,7 +75,7 @@ final class FeedViewAdapter: ResourceView {
                 return cellController
             }
             let adapter = LoadResourcePresentationAdapter<Data, WeakRefVirturalProxy<FeedImageCellController>>(loader: { [imageLoader] in
-                imageLoader(feed.imageURL).map {$0!}.eraseToAnyPublisher()
+                imageLoader(feed.imageURL).eraseToAnyPublisher()
             })
 
             let view = FeedImageCellController(
