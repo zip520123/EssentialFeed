@@ -46,7 +46,6 @@ public extension FeedImageDataStore {
 }
 
 public class LocalFeedImageDataLoader: FeedImageDataLoader, ImageDataCacheLoader {
-    public typealias SaveResult = Result<Void, Error>
 
     public enum LoadError: Swift.Error {
         case failed
@@ -88,13 +87,12 @@ public class LocalFeedImageDataLoader: FeedImageDataLoader, ImageDataCacheLoader
         return task
     }
 
-    public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult)->Void) {
-        completion(
-            SaveResult {
-                try store.insert(data, for: url)
-            }.mapError { _ in SaveError.failed}
-        )
+    public func save(_ data: Data, for url: URL) throws {
+        do {
+            try store.insert(data, for: url)
+        } catch {
+            throw SaveError.failed
+        }
     }
-
 
 }

@@ -68,7 +68,7 @@ extension Publisher where Output == Data? {
 
 private extension ImageDataCacheLoader {
     func saveIgnoringResult(_ data: Data, _ url: URL) {
-        self.save(data, for: url) { _ in }
+        try? self.save(data, for: url)
     }
 }
 
