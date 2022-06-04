@@ -1,48 +1,7 @@
 //
 public protocol FeedImageDataStore {
-    typealias RetrievalResult = Swift.Result<Data?, Error>
-    typealias InsertionResult = Swift.Result<Void, Error>
-
     func insert(_ data: Data, for url: URL) throws
     func retrieve(dataForURL url: URL) throws -> Data?
-
-    @available(*, deprecated)
-    func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult)->())
-
-    @available(*, deprecated)
-    func insert(_ data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void)
-}
-
-public extension FeedImageDataStore {
-    func insert(_ data: Data, for url: URL) throws {
-        let group = DispatchGroup()
-        group.enter()
-        var insertionResult: InsertionResult!
-        insert(data,for: url) { result in
-            insertionResult = result
-            group.leave()
-        }
-        group.wait()
-
-        return try insertionResult.get()
-    }
-
-    func retrieve(dataForURL url: URL) throws -> Data? {
-        let group = DispatchGroup()
-        group.enter()
-        var retrievalResult: RetrievalResult!
-        retrieve(dataForURL: url) { result in
-            retrievalResult = result
-            group.leave()
-        }
-        group.wait()
-
-        return try retrievalResult.get()
-    }
-
-    func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult)->()) {}
-
-    func insert(_ data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void) {}
 }
 
 public class LocalFeedImageDataLoader: FeedImageDataLoader, ImageDataCacheLoader {
