@@ -10,6 +10,10 @@ import os
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    private lazy var scheduler: AnyDispatchQueueScheduer = DispatchQueue(label: "com.essentialdevelpoer.infra.queue",
+                                               qos: .userInitiated,
+                                               attributes: .concurrent
+    ).eraseToAnyScheduler()
 
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
@@ -33,10 +37,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         LocalFeedLoader(store: store, currentDate: Date.init)
     }()
 
-    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
+    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore, schedular: AnyDispatchQueueScheduer) {
         self.init()
         self.httpClient = httpClient
         self.store = store
+        self.scheduler = scheduler
     }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -128,7 +133,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return localImageLoader
             .loadImagePublisher(from: url)
             .logCacheMisses(url, logger)
-            .fallback(to: { [logger, httpClient] in
+            .fallback(to: { [logger, httpClient, scheduler] in
                 
                 httpClient
                     .getPublisher(from: url)
@@ -136,7 +141,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     .logElapedTime(url, logger)
                     .logErrors(url, logger)
                     .caching(to: localImageLoader, using: url)
+                    .subscribe(on: scheduler)
+                    .eraseToAnyPublisher()
             })
+            .subscribe(on: scheduler)
+            .eraseToAnyPublisher()
     }
 }
 
