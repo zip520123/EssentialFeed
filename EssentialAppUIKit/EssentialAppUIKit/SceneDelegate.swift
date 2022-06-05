@@ -37,7 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         LocalFeedLoader(store: store, currentDate: Date.init)
     }()
 
-    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore, schedular: AnyDispatchQueueScheduer) {
+    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore, scheduler: AnyDispatchQueueScheduer) {
         self.init()
         self.httpClient = httpClient
         self.store = store
